@@ -1,7 +1,7 @@
-import { CssBaseline, createTheme} from "@mui/material";
-import paletteSettings from "./palette"
+import { CssBaseline, ThemeProvider, createTheme} from "@mui/material";
+import { paletteSettings } from "./palette"
 
-export default function ThemeProvider({children}) {
+export default function MyThemeProvider({children}) {
 
     const palette = paletteSettings();
     const theme = createTheme({
@@ -34,10 +34,16 @@ export default function ThemeProvider({children}) {
               fontSize: 14,
             },
           },
+          components: {
+            MuiButton: {
+                styleOverrides: {
+                    root: {minWidth: 0}
+                }
+            }
+          }
     });
 
     return (
-
         <ThemeProvider theme={theme}>
             <CssBaseline />
             {children}

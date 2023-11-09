@@ -1,6 +1,5 @@
 import { alpha } from "@mui/material";
 
-const { blue } = require("@mui/material/colors")
 
 export const grey = {
   0: '#FFFFFF',
@@ -85,9 +84,8 @@ export const info = {
   }
 
 
-export default paletteSettings = () => {
+export const paletteSettings = () => {
   return {
-    palette: {
       mode: 'light',
       primary,
       secondary,
@@ -107,5 +105,4 @@ export default paletteSettings = () => {
         neutral: grey[200],
       },
     }
-  }
-}
+};

@@ -1,8 +1,10 @@
-import { Outlet, useRoutes } from "react-router-dom";
+import { Navigate, Outlet, useRoutes, redirect } from "react-router-dom";
 import DashboardLayout from "../layouts";
+import { Box } from "@mui/material";
 
 export default function Router() {
     const routes = useRoutes([
+    
         {
             element: (
                 <DashboardLayout>
@@ -10,7 +12,9 @@ export default function Router() {
                 </DashboardLayout>
             ),
             children: [
-                {element: {}, index: true}
+                {path: '', element: <Navigate to='home' replace></Navigate>},
+                {path: 'home', element: <Box>Home</Box>},
+
             ]
         }
     ]);

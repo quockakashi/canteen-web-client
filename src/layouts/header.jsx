@@ -1,7 +1,7 @@
 import { AppBar, Avatar, Box, Button, IconButton, InputBase, Stack, Toolbar, alpha, duration, useMediaQuery, useTheme } from "@mui/material";
 import { DarkModeOutlined, LightModeOutlined, Menu as MenuIcon, NotificationsOutlined, Search as SearchIcon, SettingsOutlined } from "@mui/icons-material";
 
-export default function Header({}) {
+export default function Header({ openNav, onOpenNav }) {
     const theme = useTheme();
     const isNonMobile = useMediaQuery(theme.breakpoints.up('lg'));
 
@@ -13,7 +13,10 @@ export default function Header({}) {
                 transition: theme.transitions.create(['height'], {
                     duration: theme.transitions.duration.shorter
                 }),
-                background: alpha(theme.palette.primary.main, 0.8)
+                background: alpha(theme.palette.primary.main, 0.8),
+                ...(isNonMobile && {
+                    width: `calc(100% - ${280}px)`
+                })
             }}
         >
             <Toolbar
@@ -29,7 +32,7 @@ export default function Header({}) {
                 <Stack direction='row' alignItems='center' spacing={1}>
                 {
                     !isNonMobile && (
-                        <IconButton>
+                        <IconButton onClick={onOpenNav}>
                             <MenuIcon
                              />
                         </IconButton>
@@ -45,10 +48,12 @@ export default function Header({}) {
                         sx={{
                             color: `${theme.palette.primary.dark}`
                         }}/>
-                        <IconButton>
-                            <SearchIcon sx={{
-                            color: `${theme.palette.primary.dark}`
-                        }}/>
+                        <IconButton sx={{
+                            '& .MuiSvgIcon-root': {
+                                color: `${theme.palette.primary.dark}`
+                            }
+                        }}>
+                            <SearchIcon/>
                         </IconButton>
                     </Box>
                 </Stack>

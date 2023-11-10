@@ -2,10 +2,12 @@ import { Box, Button, Container, Grid, Stack, Typography, alpha, colors, useMedi
 import SummaryCard from "../../components/summay-card";
 import OrderTable from "./order-table";
 import { Add, FileDownload } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 export default function OrdersPage() {
     const theme = useTheme();
     const isSmallDownScreen = useMediaQuery(theme.breakpoints.down('sm'))
+    const navigate = useNavigate();
 
     return (
         <Container maxWidth='xl'>
@@ -17,7 +19,7 @@ export default function OrdersPage() {
                     </Typography>
                 </Box>
                 <Stack direction='row' alignItems={'center'} spacing={2}>
-                    <Button variant="contained" sx={{...(isSmallDownScreen ? {
+                    <Button onClick={() => navigate('new-oder')} variant="contained" sx={{...(isSmallDownScreen ? {
                         width: 40,
                         height: 40,
                         borderRadius: 50,
@@ -39,7 +41,6 @@ export default function OrdersPage() {
                     </Button>
                 </Stack>
             </Stack>
-
             <OrderTable />
         </Container>
     )

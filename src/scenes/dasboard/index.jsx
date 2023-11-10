@@ -4,9 +4,12 @@ import { Dining, LocalDining, MonetizationOn as MonetizationOnIcon, People, Sell
 import RevenueBarChar from "./revenue-bar-chart";
 import RevenueCategoriesPieChart from "./revenue-by-categories-chart";
 import RevenueProductTable from "./top-revenue-products";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
     const theme = useTheme();
+    const navigate = useNavigate();
+
     return (
         <Container maxWidth='xl'>
             <Typography variant="h2" fontWeight='bold'>Dashboard</Typography>

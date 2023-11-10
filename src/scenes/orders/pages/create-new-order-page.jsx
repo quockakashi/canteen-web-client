@@ -1,6 +1,6 @@
 import { Container, Typography, useMediaQuery, useTheme } from "@mui/material";
-import CreateOrderForm from "./craete-oder-form";
-import ConfirmSuccessOrder from "./confirm-success-order";
+import CreateOrderForm from "../craete-oder-form";
+import ConfirmSuccessOrder from "../confirm-success-order";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 

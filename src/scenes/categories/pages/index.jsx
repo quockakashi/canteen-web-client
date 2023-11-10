@@ -1,10 +1,10 @@
 import { Box, Button, Container, Grid, Stack, Typography, alpha, colors, useMediaQuery, useTheme } from "@mui/material";
-import SummaryCard from "../../components/summay-card";
-import OrderTable from "./order-table";
+import SummaryCard from "../../../components/summay-card";
 import { Add, FileDownload } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import CategoriesTable from "../categories-table";
 
-export default function OrdersPage() {
+export default function CategoriesPage() {
     const theme = useTheme();
     const isSmallDownScreen = useMediaQuery(theme.breakpoints.down('sm'))
     const navigate = useNavigate();
@@ -13,13 +13,13 @@ export default function OrdersPage() {
         <Container maxWidth='xl'>
             <Stack direction='row'  justifyContent={'space-between'} alignItems={'center'} mb={4}>
                 <Box display={'flex'} flexDirection={'column'} justifyContent={'center'}>
-                    <Typography variant="h2" fontWeight='bold'>Oders</Typography>
+                    <Typography variant="h2" fontWeight='bold'>Categories</Typography>
                     <Typography variant="subtitle2">
-                        Orders Management
+                        Categories Management
                     </Typography>
                 </Box>
                 <Stack direction='row' alignItems={'center'} spacing={2}>
-                    <Button onClick={() => navigate('new-oder')} variant="contained" sx={{...(isSmallDownScreen ? {
+                    <Button onClick={() => navigate('new-category')} variant="contained" sx={{...(isSmallDownScreen ? {
                         width: 40,
                         height: 40,
                         borderRadius: 50,
@@ -27,7 +27,7 @@ export default function OrdersPage() {
                         py: 1
                     }), textTransform: 'none'}}
                     >
-                        {<Add />} {!isSmallDownScreen &&  `Add new order`}
+                        {<Add />} {!isSmallDownScreen &&  `Add new category`}
                     </Button>
                     <Button variant="contained" sx={{...(isSmallDownScreen ? {
                         width: 40,
@@ -41,7 +41,7 @@ export default function OrdersPage() {
                     </Button>
                 </Stack>
             </Stack>
-            <OrderTable />
+            <CategoriesTable />
         </Container>
     )
 }

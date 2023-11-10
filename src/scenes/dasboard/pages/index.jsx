@@ -1,9 +1,9 @@
 import { Box, Container, Grid, Stack, Typography, alpha, useTheme } from "@mui/material";
-import SummaryCard from "../../components/summay-card";
+import SummaryCard from "../../../components/summay-card";
 import { Dining, LocalDining, MonetizationOn as MonetizationOnIcon, People, Sell as SellIcon } from "@mui/icons-material";
-import RevenueBarChar from "./revenue-bar-chart";
-import RevenueCategoriesPieChart from "./revenue-by-categories-chart";
-import RevenueProductTable from "./top-revenue-products";
+import RevenueBarChar from "../revenue-bar-chart";
+import RevenueCategoriesPieChart from "../revenue-by-categories-chart";
+import RevenueProductTable from "../top-revenue-products";
 import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {

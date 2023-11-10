@@ -1,40 +1,51 @@
 import React, {useState} from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import moment from 'moment'
-import { Box, IconButton, Toolbar, Tooltip, Typography, alpha, useTheme } from '@mui/material';
-import EnhancedTableToolbar from "./order-toolbar-table";
+import { Box, Button, ButtonGroup, IconButton, Link, Toolbar, Tooltip, Typography, alpha, useMediaQuery, useTheme } from '@mui/material';
+import CategoriesTableToolbar from './categories-table-toolbar';
+import { CheckCircleOutlineOutlined, Circle, CircleOutlined, EditOutlined } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 
-const switchStatusBgColor = (status, theme) => {
-    switch(status.toLowerCase()) {
-        case 'finished': 
-            return alpha(theme.palette.success.main, 0.8);
-            break;
-        case 'processing':
-            return alpha(theme.palette.warning.main, 0.8);
-            break;
-        case 'canceled':
-            return alpha(theme.palette.error.main, 0.8);
-    }
+export const ActionButton = ({icon, bgcolor, label, handleClick}) => {
+    const theme = useTheme();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
+    return (
+        <Button onClick={handleClick} sx={{bgcolor, textTransform: false}} variant='contained'>
+            {icon} {(!isSmallScreen ? <Typography ml={1}>{label}</Typography> : undefined)}
+        </Button>
+    )
 }
 
-export const StatusBox = ({status}) => {
+export const ActionsBox = ({id}) => {
+    const navigate = useNavigate();
+    const theme = useTheme();
+
+    const handleEditBtnClick = (e) => {
+        e.stopPropagation();
+        navigate(`/categories/edit?id=${id}`);
+    }
+
+    return (
+        <ButtonGroup>
+            <ActionButton handleClick={handleEditBtnClick} bgcolor={alpha(theme.palette.blue.main, 0.8)} icon={<EditOutlined />} label='Edit' />
+        </ButtonGroup>
+    )
+}
+
+export const EnableButton = ({isEnabled}) => {
     const theme = useTheme();
     return (
-    <Box
-        display='flex'
-        justifyContent='center'
-        alignItems='center'
-        bgcolor={switchStatusBgColor(status, theme)}
-        width={75}
-        py={1}
-        borderRadius='8px'
-        fontSize={12}
-        color={theme.palette.common.white}
-    >
-        {status}
-    </Box>
+        <IconButton onClick={(e) => {e.stopPropagation()}}>
+            {isEnabled ? <CheckCircleOutlineOutlined sx={{
+                '&.MuiSvgIcon-root': {
+                    color: theme.palette.success.main,
+                }
+            }} /> : <CircleOutlined />}
+        </IconButton>
     )
-};
+}
+
 
 const columns = [
     { 
@@ -43,29 +54,29 @@ const columns = [
         flex: 0.5 
     },
     { 
-        field: 'products',
-        headerName: 'Products', 
-        flex: 1.5, 
+        field: 'name',
+        headerName: 'Name', 
+        flex: 1, 
         sortable: false,
     },
     { 
-        field: 'createdAt', 
-        headerName: 'Created At', 
-        flex: 1,
-        valueGetter: (params) => {
-            return moment(params.row.createdAt).format('DD/MM/YYYY');
-        } 
-    },
-    {
-        field: 'total',
-        headerName: 'Total',
-        flex: 1,
-    },
-    {
-        field: 'status',
-        headerName: 'Status',
+        field: 'enabled', 
+        headerName: 'Enabled', 
+        flex: 0.5,
         sortable: false,
-        renderCell: (params) => <StatusBox status={params.row.status}></StatusBox>,
+        renderCell: (params) => <EnableButton isEnabled={params.row.enabled} />
+    },
+    {
+        field: 'totalProduct',
+        headerName: 'Total Product',
+        renderCell: (params) => (<Box display='flex' width={1} justifyContent='space-between' px={3} gap={1}>{params.row.totalProduct} <Link href={`/products?categories=${params.row.id}`} sx={{textDecoration: 'none'}} variant='body2'>View</Link></Box>),
+        flex: 1,
+    },
+    {
+        field: 'actions',
+        headerName: 'Actions',
+        sortable: false,
+        renderCell: (params) => <ActionsBox id={params.row.id}/>,
         flex: 1
     }
 ];
@@ -73,79 +84,89 @@ const columns = [
 const rows = [
     {
         id: 1,
-        products: ['Product 1', 'Product 2'],
+        name: 'Milk and milk products',
         createdAt: '2022-10-15T12:30:00.000Z',
-        total: 50,
+        totalProduct: 50,
         status: 'Processing',
+        enabled: true,
       },
       {
         id: 2,
-        products: ['Product 3', 'Product 4', 'Product 5'],
+        name: 'Milk and milk products',
         createdAt: '2022-10-16T14:45:00.000Z',
-        total: 75,
+        totalProduct: 75,
         status: 'Finished',
+        enabled: true,
       },
       {
         id: 3,
-        products: ['Product 6'],
+        name: 'Milk and milk products',
         createdAt: '2022-10-17T09:20:00.000Z',
-        total: 30,
+        totalProduct: 30,
         status: 'Finished',
+        enabled: false,
       },
       {
         id: 4,
-        products: ['Product 7', 'Product 8'],
+        name: 'Milk and milk products',
         createdAt: '2022-10-18T08:15:00.000Z',
-        total: 45,
+        totalProduct: 45,
         status: 'Canceled',
+        enabled: true,
       },
       {
         id: 5,
-        products: ['Product 9', 'Product 10'],
+        name: 'Milk and milk products',
         createdAt: '2022-10-19T17:00:00.000Z',
-        total: 60,
+        totalProduct: 60,
         status: 'Processing',
+        enabled: false,
       },
       {
         id: 6,
-        products: ['Product 11', 'Product 12', 'Product 13'],
+        name: 'Milk and milk products',
         createdAt: '2022-10-20T13:10:00.000Z',
-        total: 80,
+        totalProduct: 80,
         status: 'Processing',
+        enabled: true,
       },
       {
         id: 7,
-        products: ['Product 14'],
+        name: 'Milk and milk products',
         createdAt: '2022-10-21T11:45:00.000Z',
-        total: 25,
+        totalProduct: 25,
         status: 'Canceled',
+        enabled: true,
       },
       {
         id: 8,
-        products: ['Product 15', 'Product 16'],
+        name: 'Milk and milk products',
         createdAt: '2022-10-22T20:30:00.000Z',
-        total: 55,
+        totalProduct: 55,
         status: 'Finished',
+        enabled: true,
       },
       {
         id: 9,
-        products: ['Product 17', 'Product 18', 'Product 19'],
+        name: 'Milk and milk products',
         createdAt: '2022-10-23T09:05:00.000Z',
-        total: 70,
+        totalProduct: 70,
         status: 'Finished',
+        enabled: true,
       },
       {
         id: 10,
-        products: ['Product 20'],
+        name: 'Milk and milk products',
         createdAt: '2022-10-24T16:40:00.000Z',
-        total: 35,
+        totalProduct: 35,
         status: 'Finished',
+        enabled: true,
       },
 ];
 
 
 
-export default function OrderTable() {
+export default function CategoriesTable() {
     const theme = useTheme();
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('calories');
@@ -220,7 +241,7 @@ export default function OrderTable() {
               },
         }}
     >
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <CategoriesTableToolbar numSelected={selected.length} />
       <DataGrid
         rows={rows}
         columns={columns}

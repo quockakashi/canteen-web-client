@@ -43,10 +43,11 @@ export const CustomTooltip = ({ active, payload, label }) => {
 export default function 
 RevenueBarChar() {
     const theme = useTheme();
-    const isNonMobile = useMediaQuery(theme.breakpoints.up('lg'));
+    const isLargeScreen = useMediaQuery(theme.breakpoints.up('lg'));
+    const isMediumScreen = useMediaQuery(theme.breakpoints.up('md'));
 
     return (
-    <BarChart width={isNonMobile ?  600 : 500} height={250} data={revenueByMonthsData} barGap={5} barSize={18}>
+    <BarChart width={isLargeScreen ?  700 : isMediumScreen ? 550 : 500} height={250} data={revenueByMonthsData} barGap={5} barSize={18}>
         <CartesianGrid vertical={false} stroke={theme.palette.grey[400]} />
         <XAxis 
             dataKey="name"

@@ -1,6 +1,6 @@
 import { BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Bar } from 'recharts'
 
-import { revenueByMonthsData } from '../../data'
+import { revenueByMonthsData } from '../data'
 import { useTheme } from '@mui/material'
 import { Box, Stack, Typography, alpha, useMediaQuery } from '@mui/material';
 
@@ -41,7 +41,7 @@ export const CustomTooltip = ({ active, payload, label }) => {
   };
 
 export default function 
-RevenueBarChar() {
+CustomBarChart() {
     const theme = useTheme();
     const isLargeScreen = useMediaQuery(theme.breakpoints.up('lg'));
     const isMediumScreen = useMediaQuery(theme.breakpoints.up('md'));

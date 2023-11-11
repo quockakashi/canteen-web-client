@@ -1,10 +1,11 @@
 import { Box, Container, Grid, Stack, Typography, alpha, useTheme } from "@mui/material";
 import SummaryCard from "../../../components/summay-card";
-import { Dining, LocalDining, MonetizationOn as MonetizationOnIcon, People, Sell as SellIcon } from "@mui/icons-material";
-import RevenueBarChar from "../revenue-bar-chart";
-import RevenueCategoriesPieChart from "../revenue-by-categories-chart";
 import RevenueProductTable from "../top-revenue-products";
 import { useNavigate } from "react-router-dom";
+import ImgBgSummaryBox from "../../../components/summary-box-with-bg";
+import CustomBarChart from "../../../components/barchart";
+import CustomPieChart from "../../../components/pie-chart";
+import PrimaryStackContainer from "../../../components/primary-light-container";
 
 export default function Dashboard() {
     const theme = useTheme();
@@ -19,59 +20,72 @@ export default function Dashboard() {
 
             <Grid mb={4} container spacing={3}>
                 <Grid item xs={12} sm={6} md={3}>
-                    <SummaryCard bgColor={alpha(theme.palette.warning.main, 0.4)} title={'Weekly Revenue'} value={'$1200'} increase={12} compareTo={'week'} icon={<MonetizationOnIcon sx={{fontSize: 54}}/>}/>
+                    <ImgBgSummaryBox
+                        label={'Weekly Revenue'}
+                        value={'100K VND'}
+                        imgUrl={"url('/imgs/money-bg-box.svg')"}
+                        bgcolor={alpha(theme.palette.warning.main, 0.7)}
+                        linkColor={theme.palette.warning.lighter}
+                        handleClick={() => navigate('/revenue')}
+                    />
                 </Grid>
                 <Grid item xs={12} sm={6} md={3}>
-                    <SummaryCard bgColor={alpha(theme.palette.blue.main, 0.4)}  title={'Orders'} value={'24k'} increase={-4.2} compareTo={'month'} icon={<SellIcon sx={{fontSize: 54}}/>}/>
+                    <ImgBgSummaryBox
+                        label={'Orders'}
+                        value={'10K'}
+                        imgUrl={"url('/imgs/order-bg-box.svg')"}
+                        bgcolor={alpha(theme.palette.blue.main, 0.7)}
+                        linkColor={theme.palette.blue.lighter}
+                        handleClick={() => navigate('/orders')}
+                    />
                 </Grid>
                 <Grid item xs={12} sm={6} md={3}>
-                    <SummaryCard bgColor={alpha(theme.palette.success.main, 0.4)} title={'Products'} value={'54'} icon={<LocalDining sx={{fontSize: 54}}/>}/>
+                <ImgBgSummaryBox
+                        label={'Products'}
+                        value={'54'}
+                        imgUrl={"url('/imgs/product-bg-box.svg')"}
+                        bgcolor={alpha(theme.palette.success.main, 0.7)}
+                        linkColor={theme.palette.success.lighter}
+                        handleClick={() => navigate('/products')}
+                    />
                 </Grid>
                 <Grid item xs={12} sm={6} md={3}>
-                    <SummaryCard bgColor={alpha(theme.palette.error.main, 0.4)} title={'Account'} value={'32'} icon={<People sx={{fontSize: 54}}/>}/>
+                    <ImgBgSummaryBox
+                            label={'Account'}
+                            value={'20'}
+                            imgUrl={"url('/imgs/account-bg-box.svg')"}
+                            bgcolor={alpha(theme.palette.error.main, 0.7)}
+                            linkColor={theme.palette.error.lighter}
+                            handleClick={() => navigate('/orders')}
+                        />
                 </Grid>
             </Grid>
 
             
-            <Grid container spacing={2} mb={4}>
+            <Grid container spacing={4} mb={4} justifyContent='center' alignItems='center'>
                 <Grid 
                     item
                     xs={12}
                     md={7}
-                    display='flex'
-                    justifyContent='center'
                     >
-                    <Box width='auto' bgcolor={theme.palette.primary.light}
-                    pr={4}
-                    py={4}
-                    borderRadius='12px'
-                    >
-                        <Typography pl={3.5}
-                        mb={3} variant="h5"
-                        fontWeight='bold'>Revenue month by month</Typography>
-
-                        <RevenueBarChar/>
-                    </Box>
+                    <PrimaryStackContainer>
+                        <Stack>
+                            <Typography ml={2.5} mb={4} variant="h5" fontWeight='bold'>Revenue month by month</Typography>
+                            <CustomBarChart/>
+                        </Stack>
+                    </PrimaryStackContainer>
                 </Grid>
                 <Grid 
                     item
                     xs={12}
                     md={5}
-                    maxWidth={400}
-                    display='flex'
-                    justifyContent='center'
                     >
-                    <Box width='auto' bgcolor={theme.palette.primary.light}
-                    px={4}
-                    py={4}
-                    borderRadius='12px'
-                    >
-                        <Typography pl={3.5}
-                        mb={3} variant="h5"
-                        fontWeight='bold'>Revenue month by month</Typography>
-
-                        <RevenueCategoriesPieChart />
-                    </Box>
+                    <PrimaryStackContainer>
+                        <Stack>
+                            <Typography ml={1} mb={4} variant="h5" fontWeight='bold'>Revenues</Typography>
+                            <CustomPieChart />
+                        </Stack>
+                    </PrimaryStackContainer>
                 </Grid>
             </Grid>
 

@@ -5,7 +5,6 @@ import { Box, Button, ButtonGroup, IconButton, Link, Toolbar, Tooltip, Typograph
 import CategoriesTableToolbar from './categories-table-toolbar';
 import { CheckCircleOutlineOutlined, Circle, CircleOutlined, EditOutlined } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-
 export const ActionButton = ({icon, bgcolor, label, handleClick}) => {
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));

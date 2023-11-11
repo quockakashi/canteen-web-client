@@ -1,14 +1,13 @@
-
 import { alpha, useTheme } from '@mui/material';
 import Chart from 'react-apexcharts';
 
-export default function RevenueCategoriesPieChart() {
+export default function CustomPieChart({data}) {
   const theme = useTheme()
   return (
     <Chart
       type='donut'
-      width={300}
-      height={300}
+      width={350}
+      height={350}
       series={[45, 67, 89, 34, 43, 98]}
 
       options={{
@@ -19,11 +18,12 @@ export default function RevenueCategoriesPieChart() {
         },
         labels: ['USA', 'China', 'Russia', 'India', 'UK', 'Vietnam'],
         legend: {
-          position: 'bottom'
+          position: 'bottom',
+          fontFamily: 'Inter, sanserif'
         },
         plotOptions: {
           pie: {
-            expandOnClick: false,
+            expandOnClick: true,
             donut: {
               background: 'transparent',
             },
@@ -34,7 +34,7 @@ export default function RevenueCategoriesPieChart() {
         },
         stroke:{
           colors: [theme.palette.primary.light],
-          width: 3
+          width: 5
          },
          states: {
           hover: {
@@ -49,9 +49,7 @@ export default function RevenueCategoriesPieChart() {
           }
          }
       }}
-
     >
-
     </Chart>
   )
 }

@@ -40,7 +40,7 @@ export default function SuccessConfirmModal({open, handleClose, title, content, 
             <IconButton onClick={handleClose} sx={{position: 'absolute', top: 24, right: 24}}>
                 <Close />
             </IconButton>
-            <Box component='img' src='/success-icon.png' width={100} height={100}/>
+            <Box component='img' src='/imgs/success-icon.png' width={100} height={100}/>
             <Typography variant="h6" component="h2" fontSize={24} mb={6} mt={2}>
             {title}
             </Typography>

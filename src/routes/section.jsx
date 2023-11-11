@@ -5,6 +5,7 @@ import Dashboard from "../scenes/dasboard/pages";
 import OrdersPage from "../scenes/orders/pages";
 import CreateOrderPage from "../scenes/orders/pages/create-new-order-page";
 import CategoriesPage from "../scenes/categories/pages";
+import CreateCategoryPage from "../scenes/categories/pages/create-category-page";
 
 export default function Router() {
     const routes = useRoutes([
@@ -25,7 +26,8 @@ export default function Router() {
                 {path: 'categories', children: [
                     {
                         index: true, element: <CategoriesPage />
-                    }
+                    },
+                    {path: 'new-category', element: <CreateCategoryPage />}
                 ]}
 
             ]

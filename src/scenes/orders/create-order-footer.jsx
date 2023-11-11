@@ -1,5 +1,5 @@
 import { Button, Stack, Typography, alpha, useTheme } from "@mui/material";
-import StyledModal from "../../components/model";
+import StyledModal from "../../components/modal";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 

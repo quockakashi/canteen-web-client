@@ -1,10 +1,10 @@
 import { Button, useTheme } from "@mui/material";
 
-export const ActionButton = ({icon, bgcolor, label, handleClick}) => {
+export const ActionButton = ({icon, bgcolor, small = false, label, handleClick}) => {
     const theme = useTheme();
 
     return (
-        <Button
+        <Button 
             fullWidth={false}
             variant='contained' 
             onClick={handleClick} 
@@ -12,8 +12,8 @@ export const ActionButton = ({icon, bgcolor, label, handleClick}) => {
             {{
                 textTransform: 'none',
                 bgcolor,
-                py: 1,
-                px:2,
+                py: small ? 0.4 : 1,
+                px: small ? 1 : 2,
                 '&:hover': {
                     bgcolor,
                 },

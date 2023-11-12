@@ -48,3 +48,61 @@ export const revenueByMonthsData =  [
         "dollars": 1000
     }
   ]
+
+  export const products = [
+    {
+        id: 213412412,
+        image:"/imgs/watermelon.jpg",
+        name: 'Watermelon',
+        price: '$123',
+        category: 'Fruit',
+        enabled: true,
+    },
+    {
+        id: 213412413,
+        image:"/imgs/watermelon.jpg",
+        name: 'Watermelon',
+        price: '$123',
+        category: 'Fruit',
+        enabled: true,
+    },
+    {
+        image:"/imgs/watermelon.jpg",
+        id: 213412414,
+        name: 'Watermelon',
+        price: '$123',
+        category: 'Fruit',
+        enabled: false,
+    },
+    {
+        image:"/imgs/watermelon.jpg",
+        id: 213412415,
+        name: 'Watermelon',
+        price: '$123',
+        category: 'Fruit',
+        enabled: true,
+    },
+    {
+        id: 213412416,
+        name: 'Watermelon',
+        price: '$123',
+        category: 'Fruit',
+        enabled: true,
+    },
+    {
+        image:"/imgs/watermelon.jpg",
+        id: 213412417,
+        name: 'Watermelon',
+        price: '$123',
+        category: 'Fruit',
+        enabled: false,
+    },
+    {
+        image:"/imgs/watermelon.jpg",
+        id: 213412418,
+        name: 'Watermelon',
+        price: '$123',
+        category: 'Fruit',
+        enabled: true,
+    },
+  ]

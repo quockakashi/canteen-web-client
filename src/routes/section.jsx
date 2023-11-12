@@ -7,6 +7,7 @@ import CreateOrderPage from "../scenes/orders/pages/create-new-order-page";
 import CategoriesPage from "../scenes/categories/pages";
 import CreateCategoryPage from "../scenes/categories/pages/create-category-page";
 import RevenuePage from "../scenes/revenue/pages";
+import ProductsPage from "../scenes/products/pages";
 
 export default function Router() {
     const routes = useRoutes([
@@ -30,8 +31,8 @@ export default function Router() {
                     },
                     {path: 'new-category', element: <CreateCategoryPage />}
                 ]},
-                {path: 'revenue', element: <RevenuePage />}
-
+                {path: 'revenue', element: <RevenuePage />},
+                {path: 'products', element: <ProductsPage />}
             ]
         }
     ]);

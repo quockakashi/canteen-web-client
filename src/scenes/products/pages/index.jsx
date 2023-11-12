@@ -24,7 +24,7 @@ export default function ProductsPage() {
                     </Typography>
                 </Box>
                 <Stack direction='row' alignItems={'center'} spacing={2}>
-                    <Button onClick={() => navigate('new-category')} variant="contained" sx={{...(isSmallDownScreen ? {
+                    <Button onClick={() => navigate('new-product')} variant="contained" sx={{...(isSmallDownScreen ? {
                         width: 40,
                         height: 40,
                         borderRadius: 50,

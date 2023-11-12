@@ -1,26 +1,13 @@
 import React, {useState} from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import moment from 'moment'
-import { Box, ButtonGroup, IconButton, Toolbar, Tooltip, Typography, alpha, useTheme } from '@mui/material';
+import { Box, ButtonGroup, IconButton, Stack, Toolbar, Tooltip, Typography, alpha, useMediaQuery, useTheme } from '@mui/material';
 import EnhancedTableToolbar from "./order-toolbar-table";
 import CreateNewOrderToolbar from './create-order-toolbar';
 import { Add, Remove } from '@mui/icons-material';
 import CreateOrderFooter from './create-order-footer';
+import QuantityInput from '../../components/quantity-input';
 
-
-export const QuantityBox = ({quantity, onIncreaseQty, onDecreaseQty}) => {
-    return (
-    <ButtonGroup 
-        sx={{
-            display: 'flex', gap: 2,
-            alignItems: 'center',
-        }}
-    >
-        <IconButton onClick={onIncreaseQty}><Add /></IconButton>
-        <Box> {quantity} </Box>
-        <IconButton onClick={onDecreaseQty}> <Remove /> </IconButton>
-    </ButtonGroup>);
-}
 
 const increaseQtyHandler = (e) => {
     e.stopPropagation();
@@ -52,10 +39,9 @@ const columns = [
         field: 'quantity',
         headerName: 'Quantity',
         renderCell: (params) => {
-            return <QuantityBox quantity={params.row.quantity} onIncreaseQty={increaseQtyHandler}
-            onDecreaseQty={decreaseQtyHandler} />
+            return <Stack><QuantityInput defaultValue={1} nonNegative={true} /></Stack>
         },
-        flex: 1,
+        flex: 1.5,
         align: 'center',
         headerAlign: 'center',
         sortable: false,
@@ -131,8 +117,7 @@ export default function CreateOrderForm({handleContinue}) {
     const [page, setPage] = useState(0);
     const [dense, setDense] = useState(false);
     const [rowsPerPage, setRowsPerPage] = useState(5);
-
-    console.log(selected);
+    const isMediumScreen = useMediaQuery(theme.breakpoints.up('md'));
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -190,6 +175,8 @@ export default function CreateOrderForm({handleContinue}) {
 
   return (
     <Box
+        mx='auto'
+        maxWidth={isMediumScreen ? '900px' : 1}
         minWidth={600}
         sx={{
             "& .MuiDataGrid-columnHeaders": {
@@ -219,6 +206,7 @@ export default function CreateOrderForm({handleContinue}) {
         disableColumnFilter
         disableColumnMenu
         disableColumnSelector
+        disableRowSelectionOnClick
       />
     </Box>
   );

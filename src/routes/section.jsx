@@ -8,6 +8,7 @@ import CategoriesPage from "../scenes/categories/pages";
 import CreateCategoryPage from "../scenes/categories/pages/create-category-page";
 import RevenuePage from "../scenes/revenue/pages";
 import ProductsPage from "../scenes/products/pages";
+import CreateProductPage from "../scenes/products/pages/create-product-page";
 
 export default function Router() {
     const routes = useRoutes([
@@ -32,7 +33,10 @@ export default function Router() {
                     {path: 'new-category', element: <CreateCategoryPage />}
                 ]},
                 {path: 'revenue', element: <RevenuePage />},
-                {path: 'products', element: <ProductsPage />}
+                {path: 'products', children: [
+                    {path: '', index: true, element: <ProductsPage />},
+                    {path: 'new-product', element: <CreateProductPage />}
+                ]}
             ]
         }
     ]);

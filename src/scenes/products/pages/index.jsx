@@ -6,6 +6,7 @@ import ImgBgSummaryBox from "../../../components/summary-box-with-bg";
 import ProductCard from "../product-card";
 import { products as productsData } from '../../../data'
 import ProductToolbar from "../product.toolbar";
+import { Helmet } from "react-helmet";
 
 
 export default function ProductsPage() {
@@ -16,6 +17,9 @@ export default function ProductsPage() {
 
     return (
         <Container maxWidth='xl'>
+            <Helmet>
+                <title>Product Management - Canteen Dashboard</title>
+            </Helmet>
             <Stack direction='row'  justifyContent={'space-between'} alignItems={'center'} mb={4}>
                 <Box display={'flex'} flexDirection={'column'} justifyContent={'center'}>
                     <Typography variant="h2" fontWeight='bold'>Products</Typography>

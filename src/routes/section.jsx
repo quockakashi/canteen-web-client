@@ -1,4 +1,5 @@
 import { Navigate, Outlet, useRoutes, redirect } from "react-router-dom";
+import { Helmet} from 'react-helmet'
 import DashboardLayout from "../layouts";
 import { Box } from "@mui/material";
 import Dashboard from "../scenes/dasboard/pages";
@@ -9,6 +10,7 @@ import CreateCategoryPage from "../scenes/categories/pages/create-category-page"
 import RevenuePage from "../scenes/revenue/pages";
 import ProductsPage from "../scenes/products/pages";
 import CreateProductPage from "../scenes/products/pages/create-product-page";
+import LoginPage from "../scenes/login/login-page";
 
 export default function Router() {
     const routes = useRoutes([
@@ -38,6 +40,10 @@ export default function Router() {
                     {path: 'new-product', element: <CreateProductPage />}
                 ]}
             ]
+        },
+        {
+            path: '/login',
+            element: <LoginPage />
         }
     ]);
 

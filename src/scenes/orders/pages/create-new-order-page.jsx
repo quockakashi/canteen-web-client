@@ -3,6 +3,7 @@ import CreateOrderForm from "../craete-oder-form";
 import ConfirmSuccessOrder from "../confirm-success-order";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 export default function CreateOrderPage() {
     const theme = useTheme();
@@ -26,6 +27,9 @@ export default function CreateOrderPage() {
 
     return (
         <Container maxWidth='xl'>
+            <Helmet>
+                <title>Create Order - Canteen Dashboard</title>
+            </Helmet>
             <Typography variant="h2" fontWeight='bold'>Orders</Typography>
             <Typography variant="subtitle2" mb={4}>
                 Create new orders

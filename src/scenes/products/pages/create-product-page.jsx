@@ -5,6 +5,7 @@ import StyledModal from "../../../components/modal";
 import { useState } from "react";
 import SuccessConfirmModal from "../../../components/success-confirm-modal";
 import CreateProductForm from "../create-product-form";
+import { Helmet } from "react-helmet";
 
 export default function CreateProductPage() {
     const theme = useTheme();
@@ -22,6 +23,9 @@ export default function CreateProductPage() {
     
     return (
         <Container maxWidth='xl'>
+            <Helmet>
+                <title>Create Product - Canteen Dashboard</title>
+            </Helmet>
             <Stack direction='row'  justifyContent={'space-between'} alignItems={'center'} mb={4}>
                 <Box display={'flex'} flexDirection={'column'} justifyContent={'center'}>
                     <Typography variant="h2" fontWeight='bold'>Products</Typography>

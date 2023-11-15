@@ -6,6 +6,7 @@ import ImgBgSummaryBox from "../../../components/summary-box-with-bg";
 import CustomBarChart from "../../../components/barchart";
 import CustomPieChart from "../../../components/pie-chart";
 import PrimaryStackContainer from "../../../components/primary-light-container";
+import { Helmet } from "react-helmet";
 
 export default function Dashboard() {
     const theme = useTheme();
@@ -13,6 +14,9 @@ export default function Dashboard() {
 
     return (
         <Container maxWidth='xl'>
+            <Helmet>
+                <title>Dashboard - Canteen Dashboard</title>
+            </Helmet>
             <Typography variant="h2" fontWeight='bold'>Dashboard</Typography>
             <Typography variant="subtitle2" mb={4}>
                 Welcome {'Minh Tran'}!

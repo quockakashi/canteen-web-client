@@ -7,6 +7,7 @@ import CreateCategoryForm from "../create-category-form";
 import StyledModal from "../../../components/modal";
 import { useState } from "react";
 import SuccessConfirmModal from "../../../components/success-confirm-modal";
+import { Helmet } from "react-helmet";
 
 export default function CreateCategoryPage() {
     const theme = useTheme();
@@ -24,6 +25,9 @@ export default function CreateCategoryPage() {
     
     return (
         <Container maxWidth='xl'>
+            <Helmet>
+                <title>Create Category - Canteen Dashboard</title>
+            </Helmet>
             <Stack direction='row'  justifyContent={'space-between'} alignItems={'center'} mb={4}>
                 <Box display={'flex'} flexDirection={'column'} justifyContent={'center'}>
                     <Typography variant="h2" fontWeight='bold'>Categories</Typography>

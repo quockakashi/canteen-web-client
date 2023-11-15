@@ -1,4 +1,5 @@
 import { Box, Button, Container, Grid, Stack, Typography, alpha, colors, useMediaQuery, useTheme } from "@mui/material";
+import { Helmet } from "react-helmet";
 import SummaryCard from "../../../components/summay-card";
 import OrderTable from "../order-table";
 import { Add, FileDownload } from "@mui/icons-material";
@@ -12,6 +13,9 @@ export default function OrdersPage() {
 
     return (
         <Container maxWidth='xl'>
+            <Helmet>
+                <title>Orders Management - Canteen Dashboard</title>
+            </Helmet>
             <Stack direction='row'  justifyContent={'space-between'} alignItems={'center'} mb={4}>
                 <Box display={'flex'} flexDirection={'column'} justifyContent={'center'}>
                     <Typography variant="h2" fontWeight='bold'>Oders</Typography>

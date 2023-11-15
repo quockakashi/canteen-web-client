@@ -3,6 +3,7 @@ import SummaryCard from "../../../components/summay-card";
 import { Add, FileDownload } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import CategoriesTable from "../categories-table";
+import { Helmet } from "react-helmet";
 
 export default function CategoriesPage() {
     const theme = useTheme();
@@ -11,6 +12,9 @@ export default function CategoriesPage() {
 
     return (
         <Container maxWidth='xl'>
+            <Helmet>
+                <title>Categories Management - Canteen Dashboard</title>
+            </Helmet>
             <Stack direction='row'  justifyContent={'space-between'} alignItems={'center'} mb={4}>
                 <Box display={'flex'} flexDirection={'column'} justifyContent={'center'}>
                     <Typography variant="h2" fontWeight='bold'>Categories</Typography>

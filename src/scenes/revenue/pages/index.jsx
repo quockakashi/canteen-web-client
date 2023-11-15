@@ -9,6 +9,7 @@ import RevenuePieChart from "../revenue-pie-chart";
 import RevenueTable from "../revenue-table";
 import LineChart from "../../../components/line-chart";
 import RevenueLineChart from "../revenue-line-chart";
+import { Helmet } from "react-helmet";
 
 const scrollToIndex = () => {
     const element = document.getElementById('revenue-table');
@@ -24,6 +25,9 @@ export default function RevenuePage() {
 
     return (
         <Container maxWidth='xl'>
+            <Helmet>
+                <title>Revenue Management - Canteen Dashboard</title>
+            </Helmet>
             <Stack direction='row'  justifyContent={'space-between'} alignItems={'center'} mb={4}>
                 <Box display={'flex'} flexDirection={'column'} justifyContent={'center'}>
                     <Typography variant="h2" fontWeight='bold'>Revenue</Typography>

@@ -41,15 +41,10 @@ export default function SuccessConfirmModal({open, handleClose, title, content, 
                 <Close />
             </IconButton>
             <Box component='img' src='/imgs/success-icon.png' width={100} height={100}/>
-            <Typography variant="h6" component="h2" fontSize={24} mb={6} mt={2}>
+            <Typography variant="h6" component="h2" fontSize={24} mb={4} mt={2}>
             {title}
             </Typography>
-            <Typography variant='body1'>
             {content}
-            </Typography>
-            <Link 
-                className='link'
-                to={link}>View Details</Link>
             <Stack direction='row' position='absolute' bottom={15} justifyContent='center' width={1} right={0} spacing={4}>
             <Button variant="contained"
             startIcon={<TurnLeft />}

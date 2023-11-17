@@ -36,16 +36,6 @@ export default function RevenuePage() {
                     </Typography>
                 </Box>
                 <Stack direction='row' alignItems={'center'} spacing={2}>
-                    <Button onClick={() => navigate('new-category')} variant="contained" sx={{...(isSmallDownScreen ? {
-                        width: 40,
-                        height: 40,
-                        borderRadius: 50,
-                    } : {
-                        py: 1
-                    }), textTransform: 'none'}}
-                    >
-                        {<Add />} {!isSmallDownScreen &&  `Add new category`}
-                    </Button>
                     <Button variant="contained" sx={{...(isSmallDownScreen ? {
                         width: 40,
                         height: 40,

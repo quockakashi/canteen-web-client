@@ -1,15 +1,18 @@
-import { Container, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { Container, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import CreateOrderForm from "../craete-oder-form";
-import ConfirmSuccessOrder from "../confirm-success-order";
 import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import SuccessConfirmModal from "../../../components/success-confirm-modal";
+import OrderModal from "../order-modal";
 
 export default function CreateOrderPage() {
     const theme = useTheme();
     const isSmallDownScreen = useMediaQuery(theme.breakpoints.down('sm'));
     const [openSuccessModal, setOpenSuccessModal] = useState(false);
     const navigate = useNavigate();
+    const [ detailOrderId, setDetailOrderId ] = useState(null);
+    const [ openDetailOrder, setOpenDetailOrder ] = useState(false);
 
     const handleSuccess = useMemo(() => (() => {
         setOpenSuccessModal(false);
@@ -35,7 +38,22 @@ export default function CreateOrderPage() {
                 Create new orders
             </Typography>
             <CreateOrderForm handleContinue={handleContinue} />
-            <ConfirmSuccessOrder handleContinue={handleSuccess} open={openSuccessModal} handleClose={handleClose}/>
+            <SuccessConfirmModal handleContinue={handleSuccess} open={openSuccessModal} handleClose={handleClose}
+            title={'Order Created'} content={
+                <Stack spacing={2}>
+                    <Typography variant="body1">The order created successfully with ID: 23412412</Typography>
+                    <Stack direction='row' justifyContent='center' spacing={2}>
+                        <Link 
+                            className='link'>Export invoice</Link>
+                        <Link 
+                            className='link' onClick={() => {
+                                setDetailOrderId(1);
+                                setOpenDetailOrder(true);
+                            }}>View details</Link>
+                    </Stack>
+                </Stack>
+            }/>
+            { detailOrderId && <OrderModal open={openDetailOrder} handleClose={() => setOpenDetailOrder(false)} id={detailOrderId} />}
         </Container>
     )
 }

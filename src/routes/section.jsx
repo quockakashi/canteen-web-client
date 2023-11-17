@@ -11,6 +11,7 @@ import RevenuePage from "../scenes/revenue/pages";
 import ProductsPage from "../scenes/products/pages";
 import CreateProductPage from "../scenes/products/pages/create-product-page";
 import LoginPage from "../scenes/login/login-page";
+import Error404Page from "../scenes/errors/404/error-404-page";
 
 export default function Router() {
     const routes = useRoutes([
@@ -44,6 +45,10 @@ export default function Router() {
         {
             path: '/login',
             element: <LoginPage />
+        },
+        {
+            path: '/*',
+            element: <Error404Page />
         }
     ]);
 

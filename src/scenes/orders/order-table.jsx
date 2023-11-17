@@ -3,6 +3,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import moment from 'moment'
 import { Box, IconButton, Toolbar, Tooltip, Typography, alpha, useTheme } from '@mui/material';
 import EnhancedTableToolbar from "./order-toolbar-table";
+import OrderModal from './order-modal';
 
 const switchStatusBgColor = (status, theme) => {
     switch(status.toLowerCase()) {
@@ -26,7 +27,7 @@ export const StatusBox = ({status}) => {
         alignItems='center'
         bgcolor={switchStatusBgColor(status, theme)}
         width={75}
-        py={1}
+        py={0.6}
         borderRadius='8px'
         fontSize={12}
         color={theme.palette.common.white}
@@ -153,42 +154,17 @@ export default function OrderTable() {
     const [page, setPage] = useState(0);
     const [dense, setDense] = useState(false);
     const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [ openDetailOrder, setOpenDetailOrder] = useState(false);
+    const [ detailProductId, setDetailProductId] = useState('');
+    const [ sortModel, setSortModel ] = useState([{
+      field: 'createdAt',
+      sort: 'desc'
+    }])
 
-    console.log(selected);
-
-  const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
-  };
-
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelected = rows.map((n) => n.id);
-      setSelected(newSelected);
-      return;
-    }
-    setSelected([]);
-  };
-
-  const handleClick = (event, id) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      );
-    }
-    setSelected(newSelected);
-  };
+  const handleRowClick = (params) => {
+    setDetailProductId(params.row.id);
+    setOpenDetailOrder(true);
+  }
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -222,8 +198,12 @@ export default function OrderTable() {
     >
         <EnhancedTableToolbar numSelected={selected.length} />
       <DataGrid
+        onRowClick={handleRowClick}
+        disableRowSelectionOnClick
         rows={rows}
         columns={columns}
+        sortModel={sortModel}
+        onSortModelChange={(model) => setSortModel(model)}
         initialState={{
           pagination: {
             paginationModel: { page: 0, pageSize: 5 },
@@ -239,6 +219,7 @@ export default function OrderTable() {
         rowSelectionModel={selected}
         onRowSelectionModelChange={(newSelected) => setSelected(newSelected)}
       />
+      <OrderModal open={openDetailOrder} id={detailProductId} handleClose={() => setOpenDetailOrder(false)}></OrderModal>
     </Box>
   );
 }

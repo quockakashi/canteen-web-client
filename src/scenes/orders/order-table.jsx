@@ -196,7 +196,7 @@ export default function OrderTable() {
               },
         }}
     >
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar theme={theme} numSelected={selected.length} />
       <DataGrid
         onRowClick={handleRowClick}
         disableRowSelectionOnClick

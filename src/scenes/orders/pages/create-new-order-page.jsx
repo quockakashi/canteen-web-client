@@ -5,6 +5,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import SuccessConfirmModal from "../../../components/success-confirm-modal";
 import OrderModal from "../order-modal";
+import { PDFDownloadLink, View } from "@react-pdf/renderer";
+import InvoicePdf from "../invoice-pdf";
 
 export default function CreateOrderPage() {
     const theme = useTheme();
@@ -43,8 +45,7 @@ export default function CreateOrderPage() {
                 <Stack spacing={2}>
                     <Typography variant="body1">The order created successfully with ID: 23412412</Typography>
                     <Stack direction='row' justifyContent='center' spacing={2}>
-                        <Link 
-                            className='link'>Export invoice</Link>
+                        <PDFDownloadLink className="link" document={<InvoicePdf />} >Export invoice</PDFDownloadLink>
                         <Link 
                             className='link' onClick={() => {
                                 setDetailOrderId(1);

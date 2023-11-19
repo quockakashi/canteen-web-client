@@ -1,11 +1,11 @@
-import { Delete, FilterList, FilterListOffOutlined, Search } from "@mui/icons-material";
+import { Delete, FilterList, FilterListOffOutlined, QrCode, QrCode2, QrCode2Outlined, Search } from "@mui/icons-material";
 import { Box, FormControl, IconButton, InputBase, Toolbar, Tooltip, Typography, alpha } from "@mui/material";
 import { Form } from "react-router-dom";
 import SelectStatus from "./select-status";
 
 export default function EnhancedTableToolbar(props) {
-    const { numSelected } = props;
-  
+    const { numSelected, theme } = props;
+
     return (
       <Toolbar
         sx={{
@@ -49,7 +49,9 @@ export default function EnhancedTableToolbar(props) {
             </IconButton>
           </Tooltip>
         ) : (
-          <SelectStatus />
+          <>
+            <SelectStatus />
+          </>
         )}
       </Toolbar>
     );

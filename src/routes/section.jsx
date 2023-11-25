@@ -1,4 +1,4 @@
-import { Navigate, Outlet, useRoutes, redirect } from "react-router-dom";
+import { Navigate, Outlet, useRoutes, redirect, useParams } from "react-router-dom";
 import { Helmet} from 'react-helmet'
 import DashboardLayout from "../layouts";
 import { Box } from "@mui/material";
@@ -12,10 +12,14 @@ import ProductsPage from "../scenes/products/pages";
 import CreateProductPage from "../scenes/products/pages/create-product-page";
 import LoginPage from "../scenes/login/login-page";
 import Error404Page from "../scenes/errors/404/error-404-page";
+import StoragePage from "../scenes/storage/pages";
+import ReceiveStockPage from "../scenes/storage/pages/receive-stock-page";
+import DeliverStockPage from "../scenes/storage/pages/deliver-stock-page";
+import AccountsPage from "../scenes/accounts/pages";
+import AccountsManagementPage from "../scenes/accounts/pages/accounts-management-page";
 
 export default function Router() {
     const routes = useRoutes([
-    
         {
             element: (
                 <DashboardLayout>
@@ -39,6 +43,15 @@ export default function Router() {
                 {path: 'products', children: [
                     {path: '', index: true, element: <ProductsPage />},
                     {path: 'new-product', element: <CreateProductPage />}
+                ]},
+                {path: 'storage', children: [
+                    {path: '', index: true, element: <StoragePage />},
+                    {path: 'receive-stock', element: <ReceiveStockPage />},
+                    {path: 'deliver-stock', element: <DeliverStockPage />}
+                ]},
+                {path: 'accounts', children: [
+                    {path: '', index: true, element: <AccountsPage />},
+                    {path: 'accounts-management', element: <AccountsManagementPage />}
                 ]}
             ]
         },

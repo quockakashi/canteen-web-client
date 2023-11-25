@@ -105,4 +105,13 @@ export const revenueByMonthsData =  [
         category: 'Fruit',
         enabled: true,
     },
+
   ]
+  export const account={
+    name: 'Trần Văn Minh',
+    phonenumber: '0145 785 678',
+    address: 'Tp Hồ Chí Minh',
+    email: 'tvminh@gmail.com',
+    dateofbirth: '14/7/1984',
+    role: 1
+  }

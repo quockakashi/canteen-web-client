@@ -58,7 +58,7 @@ export default function CreateProductForm({handleCancel, handleSuccess}) {
                         <Typography>Category: </Typography>
                     </Grid>
                     <Grid item xs={8} md={5}>
-                        <SelectInput listItem={listCategory} />
+                        <SelectInput  listItem={listCategory} />
                     </Grid>
                 </Grid>
                 <Grid container alignItems='center'>

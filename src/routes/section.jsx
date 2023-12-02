@@ -16,7 +16,7 @@ import StoragePage from "../scenes/storage/pages";
 import ReceiveStockPage from "../scenes/storage/pages/receive-stock-page";
 import DeliverStockPage from "../scenes/storage/pages/deliver-stock-page";
 import AccountsPage from "../scenes/accounts/pages";
-import AccountsManagementPage from "../scenes/accounts/pages/accounts-management-page";
+import ProfilePage from "../scenes/profile/pages";
 
 export default function Router() {
     const routes = useRoutes([
@@ -50,9 +50,12 @@ export default function Router() {
                     {path: 'deliver-stock', element: <DeliverStockPage />}
                 ]},
                 {path: 'accounts', children: [
-                    {path: '', index: true, element: <AccountsPage />},
-                    {path: 'accounts-management', element: <AccountsManagementPage />}
-                ]}
+                    {path: '', index: true, element: <AccountsPage />}
+                ]},
+                {
+                    path: '/profile',
+                    element: <ProfilePage />
+                }
             ]
         },
         {

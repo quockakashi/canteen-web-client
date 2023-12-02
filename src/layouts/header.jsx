@@ -1,9 +1,26 @@
-import { AppBar, Avatar, Box, Button, IconButton, InputBase, Stack, Toolbar, alpha, duration, useMediaQuery, useTheme } from "@mui/material";
-import { DarkModeOutlined, LightModeOutlined, Menu as MenuIcon, NotificationsOutlined, Search as SearchIcon, SettingsOutlined } from "@mui/icons-material";
+import { AppBar, Avatar, Box, Button, Fade, IconButton, InputBase, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, Popper, Stack, Toolbar, Typography, alpha, duration, useMediaQuery, useTheme } from "@mui/material";
+import { ArrowForwardIosOutlined, DarkModeOutlined, LightModeOutlined, LogoutOutlined, Menu as MenuIcon, NotificationsOutlined, Search as SearchIcon, SettingsOutlined } from "@mui/icons-material";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Header({ openNav, onOpenNav }) {
     const theme = useTheme();
     const isNonMobile = useMediaQuery(theme.breakpoints.up('lg'));
+
+    const [ openPopper, setOpenPopper ] = useState(false);
+    const [ anchorEl, setAnchorEl ] = useState(null);
+    const navigate = useNavigate();
+
+    const handleOpenPopper = (e) => {
+        const anchorEl = e.currentTarget;
+        setAnchorEl(anchorEl);
+        setOpenPopper((prevState) => !prevState);
+    }
+
+    const handleViewProfileClick = (e) => {
+        setOpenPopper(false);
+        navigate('/profile');
+    }
 
     return (
         <AppBar
@@ -66,7 +83,39 @@ export default function Header({ openNav, onOpenNav }) {
                     <IconButton >
                         <NotificationsOutlined />
                     </IconButton>
-                    <Button sx={{
+                    <Popper open={openPopper} anchorEl={anchorEl} placement="bottom-end" transition sx={{zIndex: 9999}}>
+                        {({ TransitionProps}) => (
+                            <Fade {...TransitionProps} timeout={350}>
+                                <Paper sx={{bgcolor: theme.palette.common.white, width: 200}}>
+                                    <List disablePadding sx={{padding: '2px 4px'}}>
+                                        <ListItem disablePadding>
+                                            <ListItemButton onClick={handleViewProfileClick}>
+                                                <Stack direction="row" alignItems="center" spacing={2}>
+                                                    <Avatar sx={{width: 30, height: 30}} />
+                                                    <Typography fontWeight="bold">Minh Trần</Typography>
+                                                </Stack>
+                                            </ListItemButton>
+                                        </ListItem>
+                                        <ListItem disablePadding>
+                                            <ListItemButton sx={{
+                                                display: 'flex',
+                                                justifyContent: "space-between"
+                                            }}>
+                                                <ListItemIcon>
+                                                    <LogoutOutlined />
+                                                </ListItemIcon>
+                                                <Typography sx={{flex: 1}}>
+                                                    Logout
+                                                </Typography>
+                                                <ArrowForwardIosOutlined />
+                                            </ListItemButton>
+                                        </ListItem>
+                                    </List>
+                                </Paper>
+                            </Fade>
+                        )}
+                    </Popper>
+                    <Button onClick={handleOpenPopper} sx={{
                         maxWidth: '35px !important',
                         maxHeight: 35,
                         borderRadius: '50%'

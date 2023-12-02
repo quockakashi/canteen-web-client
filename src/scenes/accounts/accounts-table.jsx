@@ -13,25 +13,33 @@ const columns = [
     { 
         field: 'name',
         headerName: 'Name', 
-        flex: 1.5, 
+        flex: 1, 
         sortable: false,
     },
     { 
         field: 'phonenumber', 
         headerName: 'Phone Number', 
-        flex: 2.0,
+        flex: 1,
         sortable: false,
     },
     { 
       field: 'address', 
       headerName: 'Address', 
-      sortable: false,      
+      sortable: false,     
+      flex: 1 
     }, 
     { 
       field: 'email', 
       headerName: 'Email', 
-      sortable: false,      
-    }, 
+      sortable: true,  
+      flex: 1    
+    },
+    {
+      field: 'role',
+      headerName: 'Role',
+      sortable: false,
+      flex: 0.5
+    }
 ];
 
 const rows = [
@@ -39,32 +47,47 @@ const rows = [
         id: 1,
         name: 'Albert',
         phonenumber: '0124 578 962',
+        email: 'abc@gmail.com',
+        address: 'Thu Duc, HCMC',
+        role: 'Admin',
       },
       {
         id: 2,
         name: 'Albert',
         phonenumber: '0124 578 962',
+        email: 'abc@gmail.com',
+        address: 'Thu Duc, HCMC',
+        role: 'Admin',
       },
       {
         id: 3,
         name: 'Albert',
         phonenumber: '0124 578 962',
+        email: 'abc@gmail.com',
+        address: 'Thu Duc, HCMC',
+        role: 'Admin',
       },
       {
         id: 4,
         name: 'Albert',
         phonenumber: '0124 578 962',
+        email: 'abc@gmail.com',
+        address: 'Thu Duc, HCMC',
+        role: 'Admin',
       },
       {
         id: 5,
         name: 'Albert',
         phonenumber: '0124 578 962',
+        email: 'abc@gmail.com',
+        address: 'Thu Duc, HCMC',
+        role: 'Admin',
       },
 ];
 
 
 
-export default function AccountsTable({type}) {
+export default function AccountsTable() {
     const theme = useTheme();
     const [selected, setSelected] = useState([]);
     const [page, setPage] = useState(0);
@@ -72,7 +95,6 @@ export default function AccountsTable({type}) {
     const [rowsPerPage, setRowsPerPage] = useState(5);    
     const [ openDetailAccount, setOpenDetailAccount] = useState(false);
     const [ detailAccountId, setDetailAccountId] = useState('');
-    let accounts_type= (type==false) ?'Employee':'Administrator';
   const handleRowClick = (params) => {
     setDetailAccountId(params.row.id);
     setOpenDetailAccount(true);
@@ -99,11 +121,6 @@ export default function AccountsTable({type}) {
 
   return (
     <Stack direction='column'  justifyContent={'space-between'} alignItems={'left'} mb={4}>
-        <Box display={'flex'} flexDirection={'column'} justifyContent={'left'}>
-            <Typography variant="subtitle2">
-               {accounts_type}
-            </Typography>
-        </Box>
         <Box
             minWidth={600}
             sx={{
@@ -115,11 +132,6 @@ export default function AccountsTable({type}) {
             }}
         >
         <DataGrid
-            columnVisibilityModel={
-              {address: false,
-               email: false,
-              }
-            }
             onRowClick={handleRowClick}
             disableRowSelectionOnClick
             rows={rows}

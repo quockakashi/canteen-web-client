@@ -75,14 +75,6 @@ export default function Header({ openNav, onOpenNav }) {
                     </Box>
                 </Stack>
                 <Stack direction='row' alignItems='center' spacing={0.5}>
-                    <IconButton>
-                        {
-                            theme.palette.mode === 'light' ? <DarkModeOutlined /> : <LightModeOutlined />
-                        }
-                    </IconButton>
-                    <IconButton >
-                        <NotificationsOutlined />
-                    </IconButton>
                     <Popper open={openPopper} anchorEl={anchorEl} placement="bottom-end" transition sx={{zIndex: 9999}}>
                         {({ TransitionProps}) => (
                             <Fade {...TransitionProps} timeout={350}>

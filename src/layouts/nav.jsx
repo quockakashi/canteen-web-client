@@ -90,7 +90,7 @@ export default function Nav({ openNav, onCloseNav }) {
         
                     </Avatar>
                     <Stack alignItems='center' px={2} color={theme.palette.primary.dark} justifyContent='center' textAlign='center' width={1}>
-                        <Typography variant='h5' fontSize={16} fontWeight='bold'>DMM</Typography>
+                        <Typography variant='h5' fontSize={16} fontWeight='bold'>Minh Tran</Typography>
                         <Typography fontSize={12} variant='subtitle2'>Admin</Typography>
                     </Stack>
                 </Box>

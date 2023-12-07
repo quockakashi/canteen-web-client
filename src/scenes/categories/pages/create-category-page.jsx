@@ -1,8 +1,5 @@
-import { Box, Button, Container, Grid, Stack, Typography, alpha, colors, useMediaQuery, useTheme } from "@mui/material";
-import SummaryCard from "../../../components/summay-card";
-import { Add, FileDownload } from "@mui/icons-material";
+import { Box, Container, Stack, Typography, useTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import CategoriesTable from "../categories-table";
 import CreateCategoryForm from "../create-category-form";
 import StyledModal from "../../../components/modal";
 import { useState } from "react";
@@ -11,7 +8,6 @@ import { Helmet } from "react-helmet";
 
 export default function CreateCategoryPage() {
     const theme = useTheme();
-    const isSmallDownScreen = useMediaQuery(theme.breakpoints.down('sm'))
     const navigate = useNavigate();
     const [openCancelModal, setOpenCancelModal] = useState(false);
     const [openSuccessModal, setOpenSuccessModal] = useState(false);
@@ -35,18 +31,6 @@ export default function CreateCategoryPage() {
                         Create Category
                     </Typography>
                 </Box>
-                <Stack direction='row' alignItems={'center'} spacing={2}>
-                    <Button variant="contained" sx={{...(isSmallDownScreen ? {
-                        width: 40,
-                        height: 40,
-                        borderRadius: 50,
-                    } : {
-                        py: 1
-                    }), textTransform: 'none'}}
-                    >
-                        {<FileDownload />} {!isSmallDownScreen &&  `Export file`}
-                    </Button>
-                </Stack>
             </Stack>
             <Box mt={4} display='flex' width={1} justifyContent='center'>
                 <CreateCategoryForm handleCancel={handleCancel} handleSuccess={handleSuccess}/>

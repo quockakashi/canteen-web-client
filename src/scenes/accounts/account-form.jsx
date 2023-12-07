@@ -1,23 +1,25 @@
-import { Box, Card, CardActions, CardContent,Button, Checkbox, Grid, Input, Stack, TextField, TextareaAutosize, Typography, alpha, useMediaQuery, useTheme } from "@mui/material";
+import { Card, CardActions, CardContent, Grid, Stack, TextField, Typography, alpha, useMediaQuery, useTheme } from "@mui/material";
 import { ActionButton } from "../../components/action-button";
 import FileInput from "../../components/file-input";
 import SelectInput from "../../components/select-input";
-import { PlayDisabled } from "@mui/icons-material";
 import { useState } from "react";
 const listAccount=[
-    {value:1, text:'Administrator'},
-    {value:0, text:'Employee'}
+    {value:0, text:'Admin'},
+    {value:1, text:'Employee'}
 ]
-export default function AccountsForm({handleCancel,mode}) {
+export default function AccountsForm({editMode=false, handleCancel, handleContinue, user}) {
     const theme = useTheme();
     const isMediumScreen = useMediaQuery(theme.breakpoints.up('md'));
-    const instance=(mode==='View')?false:true;
-    const [editable,setEditable]=useState(instance);
     const handleSave = () => {
     };
-    const handleEdit = () => {
-        setEditable(true);
-    };
+    const [ userName, setUsername ] = useState( editMode ? user.name : '');
+    const [ userPhone, setUserPhone ] = useState( editMode ? user.phonenumber : '');
+    const [ userEmail, setUserEmail ] = useState( editMode ? user.email : '' );
+    const [ userAddress, setUserAddress ] = useState(editMode ? user.address : '');
+    const [ password, setPassword ] = useState('');
+    const [ userRole, setUserRole ] = useState(editMode ? user.role : 0);
+    const [ userImage, setUserImage ] = useState(editMode ? user.image : ''); 
+
     return (
         <Card 
             component='form' 
@@ -39,7 +41,9 @@ export default function AccountsForm({handleCancel,mode}) {
                         <Typography>Name: </Typography>
                     </Grid>
                     <Grid item xs={8}>
-                        <TextField disabled={!editable} fullWidth />
+                        <TextField
+                        value={userName}
+                        fullWidth />
                     </Grid>
                 </Grid>
                 <Grid container alignItems='center'>
@@ -47,7 +51,9 @@ export default function AccountsForm({handleCancel,mode}) {
                         <Typography>Phone number: </Typography>
                     </Grid>
                     <Grid item xs={8}>
-                        <TextField disabled={!editable} fullWidth />
+                        <TextField
+                        value={userPhone}
+                        fullWidth />
                     </Grid>
                 </Grid>
                 <Grid container alignItems='center'>
@@ -55,7 +61,9 @@ export default function AccountsForm({handleCancel,mode}) {
                         <Typography>Email: </Typography>
                     </Grid>
                     <Grid item xs={8}>
-                        <TextField disabled={!editable} fullWidth />
+                        <TextField
+                        value={userEmail}
+                        fullWidth />
                     </Grid>
                 </Grid>
                 <Grid container alignItems='center'>
@@ -63,7 +71,9 @@ export default function AccountsForm({handleCancel,mode}) {
                         <Typography>Address: </Typography>
                     </Grid>
                     <Grid item xs={8}>
-                        <TextField disabled={!editable} fullWidth />
+                        <TextField
+                        value={userAddress}
+                        fullWidth />
                     </Grid>
                 </Grid>
                 <Grid container alignItems='center'>
@@ -71,40 +81,33 @@ export default function AccountsForm({handleCancel,mode}) {
                         <Typography>Password: </Typography>
                     </Grid>
                     <Grid item xs={8}>
-                        <TextField disabled={!editable} fullWidth />
+                        <TextField
+                        placeholder={editMode ? 'Leave blank if you do not want to change password' : ''}
+                        value={password}
+                        fullWidth />
                     </Grid>
                 </Grid>
-                <Grid display={(mode==='Create')?'flex':'None'} container alignItems='center'>
+                <Grid container alignItems='center'>
                     <Grid item xs={4}>
-                        <Typography>Account type: </Typography>
+                        <Typography>Role: </Typography>
                     </Grid>
                     <Grid item xs={8} md={5}>
-                        <SelectInput listItem={listAccount} />
+                        <SelectInput defaultValue={userRole}  listItem={listAccount} />
                     </Grid>
                 </Grid>
-                <Grid display={(editable)?'flex':'None'} container alignItems='center'>
+                <Grid container alignItems='center'>
                     <Grid item xs={4}>
                         <Typography>Image: </Typography>
                     </Grid>
                     <Grid item xs={8}>
-                        <FileInput />
-                    </Grid>
-                </Grid>
-                <Grid display={(mode==='Create')?'None':'flex'} container alignItems='center'>
-                    <Grid item xs={4}>
-                        <Typography>Confirm Your Password: </Typography>
-                    </Grid>
-                    <Grid item xs={8}>
-                        <TextField disabled={!editable} fullWidth />
+                        <FileInput defaultImage={userImage}/>
                     </Grid>
                 </Grid>
             </CardContent>
-
-            <CardActions hidden={true} sx={{alignItems: 'center', justifyContent: 'center', gap: 2}}>
-                <ActionButton bgcolor={alpha(theme.palette.success.main, 0.8)} label={'Save'} 
-                handleClick={handleSave} />
-                <ActionButton disabled={!editable} bgcolor={alpha(theme.palette.success.main, 0.8)} label={'Edit'} 
-                handleClick={handleEdit} />
+            <CardActions sx={{alignItems: 'center', justifyContent: 'center', gap: 2}}>
+                <ActionButton bgcolor={alpha(theme.palette.error.dark, 0.8)} label={'Cancel'} handleClick={handleCancel} />
+                <ActionButton bgcolor={alpha(theme.palette.success.main, 0.8)} label={'Continue'} 
+                handleClick={handleContinue} />
             </CardActions>
         </Card>
     );

@@ -1,16 +1,15 @@
-import { Container, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { Container, Stack, Typography, useTheme } from "@mui/material";
 import CreateOrderForm from "../craete-oder-form";
 import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import SuccessConfirmModal from "../../../components/success-confirm-modal";
 import OrderModal from "../order-modal";
-import { PDFDownloadLink, View } from "@react-pdf/renderer";
+import { PDFDownloadLink} from "@react-pdf/renderer";
 import InvoicePdf from "../invoice-pdf";
 
 export default function CreateOrderPage() {
     const theme = useTheme();
-    const isSmallDownScreen = useMediaQuery(theme.breakpoints.down('sm'));
     const [openSuccessModal, setOpenSuccessModal] = useState(false);
     const navigate = useNavigate();
     const [ detailOrderId, setDetailOrderId ] = useState(null);

@@ -1,10 +1,10 @@
-import { Button, useTheme } from "@mui/material";
+import { Button } from "@mui/material";
 
 export const ActionButton = ({icon, bgcolor, small = false, label, handleClick}) => {
-    const theme = useTheme();
 
     return (
         <Button 
+            disableElevation
             fullWidth={false}
             variant='contained' 
             onClick={handleClick} 
@@ -19,7 +19,7 @@ export const ActionButton = ({icon, bgcolor, small = false, label, handleClick})
                 },
                 '&:active': {
                     bgcolor,
-                }
+                },
             }}  
             startIcon={icon}
         >

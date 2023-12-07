@@ -1,8 +1,6 @@
 import { Box, Container, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import StyledModal from "../../../components/modal";
 import { useState } from "react";
-import SuccessConfirmModal from "../../../components/success-confirm-modal";
 import { Helmet } from "react-helmet";
 import DeliverStockForm from "../deliver-stock-form";
 import ConfirmModal from "../../../components/confirm-modal";

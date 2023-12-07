@@ -1,8 +1,9 @@
-import { Box, Card, CardActions, CardContent, Checkbox, Grid, Input, Stack, TextField, TextareaAutosize, Typography, alpha, useMediaQuery, useTheme } from "@mui/material";
+import { Card, CardActions, CardContent, Checkbox, Grid, Stack, TextField, Typography, alpha, useMediaQuery, useTheme } from "@mui/material";
 import { ActionButton } from "../../components/action-button";
 import FileInput from "../../components/file-input";
 import QuantityInput from "../../components/quantity-input";
 import SelectInput from "../../components/select-input";
+import { useState } from "react";
 
 const listCategory = [
     {value: 231123213, text: 'Milk and milk products'},
@@ -13,9 +14,15 @@ const listCategory = [
     {value: 231123219, text: 'Milk and milk products'}
 ]
 
-export default function CreateProductForm({handleCancel, handleSuccess}) {
+export default function CreateProductForm({editMode, product, handleCancel, handleSuccess}) {
     const theme = useTheme();
     const isMediumScreen = useMediaQuery(theme.breakpoints.up('md'));
+    const [ productName, setProductName ] = useState(editMode ? product.name : '');
+    const [ productBrand, setProductBrand ] = useState(editMode ? product.brand : '');
+    const [ productCat, setProductCat ] = useState(editMode ? product.category.id : 231123213);
+    const [ productDes, setProductDes ] = useState(editMode ? product.description : '');
+    const [ productEnabled, setProductEnabled ] = useState(editMode ? product.enabled : true);
+    const [ productQuantity, setProductQuantity ] = useState(editMode ? product.quantity : 0);
 
     const handleContinue = () => {
         console.log('Hello');
@@ -42,7 +49,7 @@ export default function CreateProductForm({handleCancel, handleSuccess}) {
                         <Typography>Product Name: </Typography>
                     </Grid>
                     <Grid item xs={8}>
-                        <TextField fullWidth />
+                        <TextField value={productName} fullWidth />
                     </Grid>
                 </Grid>
                 <Grid container alignItems='center'>
@@ -50,7 +57,7 @@ export default function CreateProductForm({handleCancel, handleSuccess}) {
                         <Typography>Brand: </Typography>
                     </Grid>
                     <Grid item xs={8}>
-                        <TextField fullWidth />
+                        <TextField value={productBrand} fullWidth />
                     </Grid>
                 </Grid>
                 <Grid container alignItems='center'>
@@ -58,7 +65,7 @@ export default function CreateProductForm({handleCancel, handleSuccess}) {
                         <Typography>Category: </Typography>
                     </Grid>
                     <Grid item xs={8} md={5}>
-                        <SelectInput  listItem={listCategory} />
+                        <SelectInput defaultValue={productCat}  listItem={listCategory} />
                     </Grid>
                 </Grid>
                 <Grid container alignItems='center'>
@@ -66,7 +73,7 @@ export default function CreateProductForm({handleCancel, handleSuccess}) {
                         <Typography>Description: </Typography>
                     </Grid>
                     <Grid item xs={8}>
-                        <TextField fullWidth multiline rows={2} />
+                        <TextField value={productDes} fullWidth multiline rows={2} />
                     </Grid>
                 </Grid>
                 <Grid container>
@@ -75,7 +82,7 @@ export default function CreateProductForm({handleCancel, handleSuccess}) {
                             <Typography>Enabled: </Typography>
                         </Grid>
                         <Grid item xs={4}>
-                            <Checkbox sx={{px: 0}}/>
+                            <Checkbox checked={productEnabled ? 'checked' : ''} sx={{px: 0}}/>
                         </Grid>
                     </Grid>
                     <Grid item xs={6} container alignItems='center'>
@@ -83,7 +90,7 @@ export default function CreateProductForm({handleCancel, handleSuccess}) {
                             <Typography>Quantity: </Typography>
                         </Grid>
                         <Grid item xs={7}>
-                            <QuantityInput />
+                            <QuantityInput defaultValue={productQuantity} nonNegative />
                         </Grid>
                     </Grid>
                 </Grid>
@@ -92,7 +99,7 @@ export default function CreateProductForm({handleCancel, handleSuccess}) {
                         <Typography>Image: </Typography>
                     </Grid>
                     <Grid item xs={8}>
-                        <FileInput />
+                        <FileInput/>
                     </Grid>
                 </Grid>
             </CardContent>

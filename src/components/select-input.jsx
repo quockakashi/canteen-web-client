@@ -1,8 +1,8 @@
 import { MenuItem, Select } from "@mui/material";
 import { useState } from "react";
 
-export default function SelectInput({listItem, handleChange}) {
-    const [ value, setValue ] = useState(listItem[0].value);
+export default function SelectInput({listItem, handleChange, defaultValue}) {
+    const [ value, setValue ] = useState(defaultValue || listItem[0].value);
     const onChange = (e) => {
         setValue(e.target.value);
     }

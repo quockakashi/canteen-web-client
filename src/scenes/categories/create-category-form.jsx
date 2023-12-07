@@ -1,9 +1,13 @@
-import { Box, Card, CardActions, CardContent, Checkbox, Grid, Stack, TextField, TextareaAutosize, Typography, alpha, useMediaQuery, useTheme } from "@mui/material";
+import { Card, CardActions, CardContent, Checkbox, Grid, Stack, TextField, Typography, alpha, useMediaQuery, useTheme } from "@mui/material";
 import { ActionButton } from "../../components/action-button";
+import { useState } from "react";
 
-export default function CreateCategoryForm({handleCancel, handleSuccess}) {
+export default function CreateCategoryForm({editMode, category, handleCancel, handleSuccess}) {
     const theme = useTheme();
     const isMediumScreen = useMediaQuery(theme.breakpoints.up('md'));
+    const [ catName, setCatName ] = useState(editMode ? category.name : '');
+    const [ description, setDescription ] = useState( editMode ? category.description : '');
+    const [ enabled, setEnabled ] = useState( editMode ? category.enabled : true );
 
     const handleContinue = () => {
         console.log('Hello');
@@ -30,7 +34,9 @@ export default function CreateCategoryForm({handleCancel, handleSuccess}) {
                             <Typography>Category Name: </Typography>
                         </Grid>
                         <Grid item xs={8}>
-                            <TextField fullWidth />
+                            <TextField
+                            value={catName}
+                            fullWidth/>
                         </Grid>
                     </Grid>
                     <Grid container alignItems='center'>
@@ -38,15 +44,16 @@ export default function CreateCategoryForm({handleCancel, handleSuccess}) {
                             <Typography>Description: </Typography>
                         </Grid>
                         <Grid item xs={8}>
-                            <TextField fullWidth multiline rows={2} />
+                            <TextField
+                            value={description} fullWidth multiline rows={2} />
                         </Grid>
                     </Grid>
                     <Grid container alignItems='center'>
                     <Grid item xs={4}>
-                        <Typography>Description: </Typography>
+                        <Typography>Enabled: </Typography>
                     </Grid>
                 <Grid item xs={8}>
-                    <Checkbox sx={{px: 0}}/>
+                    <Checkbox checked={enabled ? 'checked' : ''} sx={{px: 0}}/>
                 </Grid>
                 </Grid>
             </CardContent>

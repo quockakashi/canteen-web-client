@@ -1,8 +1,6 @@
-import { Box, Button, Container, Grid, Link, Pagination, Stack, Typography, alpha, colors, useMediaQuery, useTheme } from "@mui/material";
-import SummaryCard from "../../../components/summay-card";
+import { Box, Button, Container, Grid, Pagination, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { Add, FileDownload } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import ImgBgSummaryBox from "../../../components/summary-box-with-bg";
 import ProductCard from "../product-card";
 import { products as productsData } from '../../../data'
 import ProductToolbar from "../product.toolbar";

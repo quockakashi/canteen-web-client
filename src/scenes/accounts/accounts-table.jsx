@@ -1,8 +1,18 @@
 import React, {useState} from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import moment from 'moment'
-import { Box, IconButton, Toolbar, Tooltip,Stack, Typography, alpha, useTheme } from '@mui/material';
-import AccountModal from './account-modal';
+import { Box, Stack, useTheme, useMediaQuery, ButtonGroup } from '@mui/material';
+import { ActionButton } from '../../components/action-button';
+import { AdminPanelSettings, PeopleAltOutlined } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
+
+const ActionsBox = ({id}) => {
+  const navigate = useNavigate();
+  return (
+    <ButtonGroup component={Box}  gap={1}>
+      <ActionButton small={true} bgcolor="#FFD666"  label="Edit" handleClick={() => navigate(`./edit/${id}`)}/>
+      <ActionButton small bgcolor="#FF5630" label="Remove"/>
+    </ButtonGroup>)
+}
 
 const columns = [
     { 
@@ -38,7 +48,29 @@ const columns = [
       field: 'role',
       headerName: 'Role',
       sortable: false,
-      flex: 0.5
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          (params.row.role === 'Admin') 
+          ? (
+            <Box width={75} display="flex" justifyContent="center" alignItems="center" padding={1} bgcolor="#b79cff" borderRadius={1}>
+              <AdminPanelSettings />
+              &nbsp;Admin
+            </Box>
+          ) 
+          : (
+            <Box width={75} display="flex" justifyContent="center" alignItems="center" padding={1} bgcolor="#b79cff" borderRadius={1}>
+              <PeopleAltOutlined />
+              &nbsp;User
+            </Box>
+          )
+        )
+      }
+    },
+    {
+      headerName: 'Action',
+      flex: 1,
+      renderCell: (params) => <ActionsBox id={params.row.id} />
     }
 ];
 
@@ -57,7 +89,7 @@ const rows = [
         phonenumber: '0124 578 962',
         email: 'abc@gmail.com',
         address: 'Thu Duc, HCMC',
-        role: 'Admin',
+        role: 'User',
       },
       {
         id: 3,
@@ -85,10 +117,9 @@ const rows = [
       },
 ];
 
-
-
 export default function AccountsTable() {
     const theme = useTheme();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'));
     const [selected, setSelected] = useState([]);
     const [page, setPage] = useState(0);
     const [dense, setDense] = useState(false);
@@ -133,6 +164,10 @@ export default function AccountsTable() {
         >
         <DataGrid
             onRowClick={handleRowClick}
+            columnVisibilityModel={{
+              email: !isSmallScreen,
+              address: !isSmallScreen,
+            }}
             disableRowSelectionOnClick
             rows={rows}
             columns={columns}
@@ -151,7 +186,6 @@ export default function AccountsTable() {
         onRowSelectionModelChange={(newSelected) => setSelected(newSelected)}
         />
         </Box>
-        <AccountModal open={openDetailAccount} id={detailAccountId} mode={'View'} handleClose={() => setOpenDetailAccount(false)}></AccountModal>
     </Stack>
   );
 }

@@ -1,16 +1,13 @@
 import { Box, Button, Container, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
-import { Add, ImportExport, Minus } from "@mui/icons-material";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import AccountsTable from "../accounts-table";
-import AccountModal from "../account-modal";
-import { useState } from "react";
+import { Add } from "@mui/icons-material";
 
 export default function AccountsManagementPage() {
     const theme = useTheme();
     const isSmallDownScreen = useMediaQuery(theme.breakpoints.down('sm'))
     const navigate = useNavigate();
-    const [openCreateAccount,setOpenCreateAccount]=useState(false);
 
     return (
         <Container maxWidth='xl'>
@@ -24,7 +21,7 @@ export default function AccountsManagementPage() {
                         Management accounts
                     </Typography>
                 </Box>
-                <Button onClick={() => setOpenCreateAccount(true)} variant="contained" sx={{...(isSmallDownScreen ? {
+                <Button onClick={() => navigate('./new-account')} variant="contained" sx={{...(isSmallDownScreen ? {
                         width: 40,
                         height: 40,
                         borderRadius: 50,
@@ -36,7 +33,6 @@ export default function AccountsManagementPage() {
                 </Button>
             </Stack>
             <AccountsTable/>
-            <AccountModal open={openCreateAccount} mode={'Create'} handleClose={() => setOpenCreateAccount(false)}></AccountModal>
         </Container>
     )
 }

@@ -1,12 +1,9 @@
-import { Box, Button, Container, Grid, Stack, Typography, alpha, colors, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Button, Container, Grid, Stack, Typography, alpha, useMediaQuery, useTheme } from "@mui/material";
 import { Helmet } from "react-helmet";
-import SummaryCard from "../../../components/summay-card";
 import OrderTable from "../order-table";
 import { Add, FileDownload } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import ImgBgSummaryBox from "../../../components/summary-box-with-bg";
-import OrderModal from "../order-modal";
-import { useState } from "react";
 
 export default function OrdersPage() {
     const theme = useTheme();

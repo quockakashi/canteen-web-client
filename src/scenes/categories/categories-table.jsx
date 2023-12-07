@@ -5,16 +5,7 @@ import { Box, Button, ButtonGroup, IconButton, Link, Toolbar, Tooltip, Typograph
 import CategoriesTableToolbar from './categories-table-toolbar';
 import { CheckCircleOutlineOutlined, Circle, CircleOutlined, EditOutlined } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-export const ActionButton = ({icon, bgcolor, label, handleClick}) => {
-    const theme = useTheme();
-    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
-
-    return (
-        <Button onClick={handleClick} sx={{bgcolor, textTransform: false}} variant='contained'>
-            {icon} {(!isSmallScreen ? <Typography ml={1}>{label}</Typography> : undefined)}
-        </Button>
-    )
-}
+import { ActionButton } from '../../components/action-button';
 
 export const ActionsBox = ({id}) => {
     const navigate = useNavigate();
@@ -22,12 +13,12 @@ export const ActionsBox = ({id}) => {
 
     const handleEditBtnClick = (e) => {
         e.stopPropagation();
-        navigate(`/categories/edit?id=${id}`);
+        navigate(`/categories/edit/${id}`);
     }
 
     return (
         <ButtonGroup>
-            <ActionButton handleClick={handleEditBtnClick} bgcolor={alpha(theme.palette.blue.main, 0.8)} icon={<EditOutlined />} label='Edit' />
+            <ActionButton bgcolor={theme.palette.warning.main} label="Edit" handleClick={handleEditBtnClick} small="true" />
         </ButtonGroup>
     )
 }

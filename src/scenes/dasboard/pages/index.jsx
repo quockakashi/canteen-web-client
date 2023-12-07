@@ -60,7 +60,7 @@ export default function Dashboard() {
                             imgUrl={"url('/imgs/account-bg-box.svg')"}
                             bgcolor={alpha(theme.palette.error.main, 0.7)}
                             linkColor={theme.palette.error.lighter}
-                            handleClick={() => navigate('/orders')}
+                            handleClick={() => navigate('/accounts')}
                         />
                 </Grid>
             </Grid>

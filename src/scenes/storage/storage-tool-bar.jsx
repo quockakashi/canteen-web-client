@@ -1,6 +1,5 @@
 import { Search } from "@mui/icons-material";
-import { Box, InputBase, ListItem, MenuItem, Select, Toolbar, Typography } from "@mui/material";
-import { useState } from "react";
+import { Box, InputBase, Toolbar } from "@mui/material";
 
 export default function StorageToolbar({...other}) {
 

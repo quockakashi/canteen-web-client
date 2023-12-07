@@ -1,16 +1,14 @@
-import { Box, Button, Container,  Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
-import { FileDownload } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import { Box,  Container, Stack, Typography } from "@mui/material";
+import { useNavigate, useParams } from "react-router-dom";
 import StyledModal from "../../../components/modal";
 import { useState } from "react";
 import SuccessConfirmModal from "../../../components/success-confirm-modal";
-import CreateProductForm from "../create-product-form";
 import { Helmet } from "react-helmet";
+import AccountsForm from "../account-form";
 
-export default function CreateProductPage() {
-    const theme = useTheme();
-    const isSmallDownScreen = useMediaQuery(theme.breakpoints.down('sm'))
+export default function EditAccountPage() {
     const navigate = useNavigate();
+    const params = useParams();
     const [openCancelModal, setOpenCancelModal] = useState(false);
     const [openSuccessModal, setOpenSuccessModal] = useState(false);
     const [ successCategoryId, setSuccessCategoryId] = useState('');
@@ -24,30 +22,31 @@ export default function CreateProductPage() {
     return (
         <Container maxWidth='xl'>
             <Helmet>
-                <title>Create Product - Canteen Dashboard</title>
+                <title>Edit Account - Canteen Dashboard</title>
             </Helmet>
             <Stack direction='row'  justifyContent={'space-between'} alignItems={'center'} mb={4}>
                 <Box display={'flex'} flexDirection={'column'} justifyContent={'center'}>
-                    <Typography variant="h2" fontWeight='bold'>Products</Typography>
+                    <Typography variant="h2" fontWeight='bold'>Accounts</Typography>
                     <Typography variant="subtitle2">
-                        Create Product
+                        Edit Account &nbsp; <Typography component="span" color="primary.dark" >#{params.id}</Typography>
                     </Typography>
                 </Box>
-                <Stack direction='row' alignItems={'center'} spacing={2}>
-                    <Button variant="contained" sx={{...(isSmallDownScreen ? {
-                        width: 40,
-                        height: 40,
-                        borderRadius: 50,
-                    } : {
-                        py: 1
-                    }), textTransform: 'none'}}
-                    >
-                        {<FileDownload />} {!isSmallDownScreen &&  `Export file`}
-                    </Button>
-                </Stack>
             </Stack>
             <Box mt={4} display='flex' width={1} justifyContent='center'>
-                <CreateProductForm handleCancel={handleCancel} handleSuccess={handleSuccess}/>
+                <AccountsForm
+                editMode
+                user={
+                    {
+                        id: 1,
+                        name: 'Trần Văn Minh',
+                        phonenumber: '034215525',
+                        email: 'minhtran@gmail.com',
+                        address: 'TP Thu Duc, HCMC',
+                        role: 0,
+                        image: '/imgs/watermelon.jpg',
+                    }
+                }
+                handleCancel={handleCancel} handleSuccess={handleSuccess}/>
             </Box>
 
             <StyledModal open={openCancelModal} handleClose={() => setOpenCancelModal(false)} handleContinue={() => {

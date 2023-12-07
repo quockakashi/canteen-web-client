@@ -2,8 +2,8 @@ import { Delete, Remove, Upload, UploadFile } from "@mui/icons-material";
 import { Box, IconButton, Stack, Typography, useTheme } from "@mui/material";
 import { useMemo, useState } from "react";
 
-export default function FileInput() {
-    const [ image, setImage ] = useState(null);
+export default function FileInput({defaultImage}) {
+    const [ image, setImage ] = useState(defaultImage || null);
     const [ fileName, setFileName ] = useState('No image selected');
     const theme = useTheme();
     const handleClick = useMemo(() => ((e) => {

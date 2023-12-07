@@ -2,11 +2,11 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Box, IconButton, Stack, alpha, useTheme } from '@mui/material';
 import { CheckCircleOutlineOutlined, CircleOutlined } from '@mui/icons-material';
 import { ActionButton } from '../../components/action-button';
+import { useNavigate } from 'react-router-dom';
 
 export const EnableButton = ({isEnabled}) => {
     const theme = useTheme();
@@ -23,6 +23,12 @@ export const EnableButton = ({isEnabled}) => {
 
 export default function ProductCard({product}) {
     const theme = useTheme();
+    const navigate = useNavigate();
+
+    const handleClickEditBtn = (id) => {
+      console.log("hello");
+      return navigate(`./edit/${id}`);
+  }
 
   return (
     <Card sx={{ flex:1,  maxWidth: 275, borderRadius: 4, }}>
@@ -51,8 +57,12 @@ export default function ProductCard({product}) {
       </CardContent>
       <CardActions>
         <ActionButton bgcolor={theme.palette.error.main} small={true} label={'Delete'} />
-        <ActionButton bgcolor={theme.palette.blue.dark} small={true} label={'Edit'} />
-        <ActionButton bgcolor={theme.palette.warning.main} small={true} label={'Details'} />
+        <ActionButton 
+          bgcolor={theme.palette.blue.main} 
+          small={true} 
+          label={'Edit'}
+          handleClick={() => handleClickEditBtn('124124')}
+        />
       </CardActions>
     </Card>
   );

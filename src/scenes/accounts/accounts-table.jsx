@@ -1,123 +1,29 @@
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { Box, Stack, useTheme, useMediaQuery, ButtonGroup } from '@mui/material';
 import { ActionButton } from '../../components/action-button';
 import { AdminPanelSettings, PeopleAltOutlined } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-const ActionsBox = ({id}) => {
+const ActionsBox = ({id, onDelete}) => {
   const navigate = useNavigate();
   return (
     <ButtonGroup component={Box}  gap={1}>
       <ActionButton small={true} bgcolor="#FFD666"  label="Edit" handleClick={() => navigate(`./edit/${id}`)}/>
-      <ActionButton small bgcolor="#FF5630" label="Remove"/>
+      <ActionButton small
+      handleClick={() => {
+        if(window.confirm(`Are you sure to delete account ${id}?`)) {
+          axios.delete(`${process.env.REACT_APP_BASE_URL}/api/users/${id}`).then(() => onDelete());
+        }
+      }}
+       bgcolor="#FF5630" label="Remove"/>
     </ButtonGroup>)
 }
 
-const columns = [
-    { 
-        field: 'id',
-        headerName: 'ID',
-        flex: 0.5 
-    },
-    { 
-        field: 'name',
-        headerName: 'Name', 
-        flex: 1, 
-        sortable: false,
-    },
-    { 
-        field: 'phonenumber', 
-        headerName: 'Phone Number', 
-        flex: 1,
-        sortable: false,
-    },
-    { 
-      field: 'address', 
-      headerName: 'Address', 
-      sortable: false,     
-      flex: 1 
-    }, 
-    { 
-      field: 'email', 
-      headerName: 'Email', 
-      sortable: true,  
-      flex: 1    
-    },
-    {
-      field: 'role',
-      headerName: 'Role',
-      sortable: false,
-      flex: 1,
-      renderCell: (params) => {
-        return (
-          (params.row.role === 'Admin') 
-          ? (
-            <Box width={75} display="flex" justifyContent="center" alignItems="center" padding={1} bgcolor="#b79cff" borderRadius={1}>
-              <AdminPanelSettings />
-              &nbsp;Admin
-            </Box>
-          ) 
-          : (
-            <Box width={75} display="flex" justifyContent="center" alignItems="center" padding={1} bgcolor="#b79cff" borderRadius={1}>
-              <PeopleAltOutlined />
-              &nbsp;User
-            </Box>
-          )
-        )
-      }
-    },
-    {
-      headerName: 'Action',
-      flex: 1,
-      renderCell: (params) => <ActionsBox id={params.row.id} />
-    }
-];
 
-const rows = [
-    {
-        id: 1,
-        name: 'Albert',
-        phonenumber: '0124 578 962',
-        email: 'abc@gmail.com',
-        address: 'Thu Duc, HCMC',
-        role: 'Admin',
-      },
-      {
-        id: 2,
-        name: 'Albert',
-        phonenumber: '0124 578 962',
-        email: 'abc@gmail.com',
-        address: 'Thu Duc, HCMC',
-        role: 'User',
-      },
-      {
-        id: 3,
-        name: 'Albert',
-        phonenumber: '0124 578 962',
-        email: 'abc@gmail.com',
-        address: 'Thu Duc, HCMC',
-        role: 'Admin',
-      },
-      {
-        id: 4,
-        name: 'Albert',
-        phonenumber: '0124 578 962',
-        email: 'abc@gmail.com',
-        address: 'Thu Duc, HCMC',
-        role: 'Admin',
-      },
-      {
-        id: 5,
-        name: 'Albert',
-        phonenumber: '0124 578 962',
-        email: 'abc@gmail.com',
-        address: 'Thu Duc, HCMC',
-        role: 'Admin',
-      },
-];
-
-export default function AccountsTable() {
+export default function AccountsTable({data, onDelete}) {
+    let users = data;
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'));
     const [selected, setSelected] = useState([]);
@@ -126,6 +32,64 @@ export default function AccountsTable() {
     const [rowsPerPage, setRowsPerPage] = useState(5);    
     const [ openDetailAccount, setOpenDetailAccount] = useState(false);
     const [ detailAccountId, setDetailAccountId] = useState('');
+
+    const columns = useMemo(() => (
+      [
+        { 
+            field: '_id',
+            headerName: 'ID',
+            flex: 1.5 
+        },
+        { 
+            field: 'name',
+            headerName: 'Name', 
+            flex: 1, 
+            sortable: false,
+        },
+        { 
+            field: 'email', 
+            headerName: 'Email', 
+            flex: 1,
+            sortable: false,
+        },
+        { 
+          field: 'address', 
+          headerName: 'Address', 
+          sortable: false,     
+          flex: 1 
+        },
+        {
+          field: 'role',
+          headerName: 'Role',
+          sortable: false,
+          flex: 1,
+          renderCell: (params) => {
+            return (
+              (params.row.role === 'admin') 
+              ? (
+                <Box width={75} display="flex" justifyContent="center" alignItems="center" padding={1} bgcolor="#b79cff" borderRadius={1}>
+                  <AdminPanelSettings />
+                  &nbsp;Admin
+                </Box>
+              ) 
+              : (
+                <Box width={75} display="flex" justifyContent="center" alignItems="center" padding={1} bgcolor="#b79cff" borderRadius={1}>
+                  <PeopleAltOutlined />
+                  &nbsp;User
+                </Box>
+              )
+            )
+          }
+        },
+        {
+          headerName: 'Action',
+          flex: 1,
+          renderCell: (params) => <ActionsBox id={params.row._id} onDelete={() => onDelete(users.filter((user) => user._id !== params.row._id))} />
+        }
+    ]
+    ), [users])
+
+
   const handleRowClick = (params) => {
     setDetailAccountId(params.row.id);
     setOpenDetailAccount(true);
@@ -147,7 +111,7 @@ export default function AccountsTable() {
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0;
 
 
   return (
@@ -169,7 +133,8 @@ export default function AccountsTable() {
               address: !isSmallScreen,
             }}
             disableRowSelectionOnClick
-            rows={rows}
+            rows={users}
+            getRowId={(row) => row._id}
             columns={columns}
             initialState={{
             pagination: {

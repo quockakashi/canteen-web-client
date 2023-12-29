@@ -1,4 +1,4 @@
-import { Box,  Container, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { Box,  Container, Stack, Typography, useTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import StyledModal from "../../../components/modal";
 import { useState } from "react";
@@ -8,16 +8,15 @@ import AccountsForm from "../account-form";
 
 export default function CreateAccountPage() {
     const theme = useTheme();
-    const isSmallDownScreen = useMediaQuery(theme.breakpoints.down('sm'))
     const navigate = useNavigate();
     const [openCancelModal, setOpenCancelModal] = useState(false);
     const [openSuccessModal, setOpenSuccessModal] = useState(false);
-    const [ successCategoryId, setSuccessCategoryId] = useState('');
+    const [ id, setId] = useState('');
 
     const handleCancel = () => setOpenCancelModal(true);
-    const handleSuccess = (id) => {
+    const successHandler = (id) => {
         setOpenSuccessModal(true);
-        setSuccessCategoryId(id);
+        setId(id);
     }
     
     return (
@@ -35,24 +34,24 @@ export default function CreateAccountPage() {
             </Stack>
             <Box mt={4} display='flex' width={1} justifyContent='center'>
                 <AccountsForm 
-                handleCancel={handleCancel} handleSuccess={handleSuccess}/>
+                handleCancel={handleCancel} onSuccess={successHandler}/>
             </Box>
 
             <StyledModal open={openCancelModal} handleClose={() => setOpenCancelModal(false)} handleContinue={() => {
                 setOpenCancelModal(false);
-                navigate('/categories')
-            }} title={'Are you sure to continue?'} content={'If you continue, the current category data will be removed'} />
+                navigate('/accounts')
+            }} title={'Are you sure to continue?'} content={'If you continue, the current account data will be removed'} />
 
             <SuccessConfirmModal 
             open={openSuccessModal} 
-            handleClose={() => navigate('/categories')}
+            handleClose={() => navigate('/accounts')}
             handleContinue={() => {
                 setOpenSuccessModal(false);
-                navigate('/categories/new-category')
+                navigate('/accounts/new-account')
             }}
-            title={'Category Created Successfully'}
-            content={`The category was created with ID: ${successCategoryId}`}
-            link={`/categories/${successCategoryId}`}    
+            title={'Accounts Created Successfully'}
+            content={`Account was created with ID: ${id}`}
+            link={`/accounts/${id}`}    
             />
         </Container>
     )

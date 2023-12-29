@@ -3,22 +3,49 @@ import { ActionButton } from "../../components/action-button";
 import FileInput from "../../components/file-input";
 import SelectInput from "../../components/select-input";
 import { useState } from "react";
+import axios from 'axios'
+import { Mode } from "@mui/icons-material";
+
 const listAccount=[
-    {value:0, text:'Admin'},
-    {value:1, text:'Employee'}
+    {value:'admin', text:'Admin'},
+    {value:'user', text:'Employee'}
 ]
-export default function AccountsForm({editMode=false, handleCancel, handleContinue, user}) {
+export default function AccountsForm({editMode=false, handleCancel, onSuccess, user}) {
     const theme = useTheme();
     const isMediumScreen = useMediaQuery(theme.breakpoints.up('md'));
     const handleSave = () => {
     };
-    const [ userName, setUsername ] = useState( editMode ? user.name : '');
-    const [ userPhone, setUserPhone ] = useState( editMode ? user.phonenumber : '');
-    const [ userEmail, setUserEmail ] = useState( editMode ? user.email : '' );
-    const [ userAddress, setUserAddress ] = useState(editMode ? user.address : '');
-    const [ password, setPassword ] = useState('');
-    const [ userRole, setUserRole ] = useState(editMode ? user.role : 0);
-    const [ userImage, setUserImage ] = useState(editMode ? user.image : ''); 
+
+    const [ nameInput, setNameInput ] = useState( editMode ? user.name : '');
+    const [ phoneInput, setPhoneInput ] = useState( editMode ? user.phone : '');
+    const [ emailInput, setEmailInput ] = useState( editMode ? user.email : '' );
+    const [ addressInput, setAddressInput ] = useState(editMode ? user.address : '');
+    const [ passwordInput, setPasswordInput ] = useState('');
+    const [ roleInput, setRoleInput ] = useState(editMode ? user.role : 'user');
+    const [ image, setImage ] = useState(editMode ? user.image : ''); 
+    const [ file, setFile ] = useState(null);
+
+    const continueHandler = (e) => {
+        let formData = new FormData();
+        formData.append('name', nameInput);
+        formData.append('address', addressInput);
+        formData.append('phone', phoneInput);
+        formData.append('email', emailInput);
+        if(passwordInput.trim()) {
+            formData.append('password', passwordInput.trim());
+        }
+        formData.append('role', roleInput);
+        if(file) {
+            formData.append('image', file);
+        }
+
+        if(editMode) {
+            axios.patch(`${process.env.REACT_APP_BASE_URL}/api/users/${user._id}`, formData).then(res => onSuccess(res.data.data._id));
+        } else {
+            axios.post(`${process.env.REACT_APP_BASE_URL}/api/users`, formData).then(res => onSuccess(res.data.data._id));
+        }
+
+    }
 
     return (
         <Card 
@@ -42,7 +69,8 @@ export default function AccountsForm({editMode=false, handleCancel, handleContin
                     </Grid>
                     <Grid item xs={8}>
                         <TextField
-                        value={userName}
+                        value={nameInput}
+                        onChange={(e) => setNameInput(e.target.value)}
                         fullWidth />
                     </Grid>
                 </Grid>
@@ -52,7 +80,8 @@ export default function AccountsForm({editMode=false, handleCancel, handleContin
                     </Grid>
                     <Grid item xs={8}>
                         <TextField
-                        value={userPhone}
+                        value={phoneInput}
+                        onChange={(e) => setPhoneInput(e.target.value)}
                         fullWidth />
                     </Grid>
                 </Grid>
@@ -62,7 +91,8 @@ export default function AccountsForm({editMode=false, handleCancel, handleContin
                     </Grid>
                     <Grid item xs={8}>
                         <TextField
-                        value={userEmail}
+                        value={emailInput}
+                        onInput={(e) => setEmailInput(e.target.value)}
                         fullWidth />
                     </Grid>
                 </Grid>
@@ -72,7 +102,8 @@ export default function AccountsForm({editMode=false, handleCancel, handleContin
                     </Grid>
                     <Grid item xs={8}>
                         <TextField
-                        value={userAddress}
+                        value={addressInput}
+                        onChange={(e) => setAddressInput(e.target.value)}
                         fullWidth />
                     </Grid>
                 </Grid>
@@ -83,7 +114,8 @@ export default function AccountsForm({editMode=false, handleCancel, handleContin
                     <Grid item xs={8}>
                         <TextField
                         placeholder={editMode ? 'Leave blank if you do not want to change password' : ''}
-                        value={password}
+                        value={passwordInput}
+                        onChange={(e) => setPasswordInput(e.target.value)}
                         fullWidth />
                     </Grid>
                 </Grid>
@@ -92,7 +124,10 @@ export default function AccountsForm({editMode=false, handleCancel, handleContin
                         <Typography>Role: </Typography>
                     </Grid>
                     <Grid item xs={8} md={5}>
-                        <SelectInput defaultValue={userRole}  listItem={listAccount} />
+                        <SelectInput 
+                        defaultValue={roleInput}
+                        handleChange={setRoleInput}
+                        listItem={listAccount} />
                     </Grid>
                 </Grid>
                 <Grid container alignItems='center'>
@@ -100,14 +135,14 @@ export default function AccountsForm({editMode=false, handleCancel, handleContin
                         <Typography>Image: </Typography>
                     </Grid>
                     <Grid item xs={8}>
-                        <FileInput defaultImage={userImage}/>
+                        <FileInput defaultImage={image} onChange={setFile}/>
                     </Grid>
                 </Grid>
             </CardContent>
             <CardActions sx={{alignItems: 'center', justifyContent: 'center', gap: 2}}>
                 <ActionButton bgcolor={alpha(theme.palette.error.dark, 0.8)} label={'Cancel'} handleClick={handleCancel} />
                 <ActionButton bgcolor={alpha(theme.palette.success.main, 0.8)} label={'Continue'} 
-                handleClick={handleContinue} />
+                handleClick={continueHandler} />
             </CardActions>
         </Card>
     );

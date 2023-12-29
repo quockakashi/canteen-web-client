@@ -1,22 +1,27 @@
 import { Box,  Container, Stack, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import StyledModal from "../../../components/modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SuccessConfirmModal from "../../../components/success-confirm-modal";
 import { Helmet } from "react-helmet";
 import AccountsForm from "../account-form";
+import axios from 'axios';
 
 export default function EditAccountPage() {
     const navigate = useNavigate();
     const params = useParams();
     const [openCancelModal, setOpenCancelModal] = useState(false);
     const [openSuccessModal, setOpenSuccessModal] = useState(false);
-    const [ successCategoryId, setSuccessCategoryId] = useState('');
+    const { id } = useParams();
+    const [user, setUser] = useState(null);
+    useEffect(() => {
+        axios.get(`http://localhost:5000/api/users/${id}`).then(res => setUser(res.data.data));
+    })
+
 
     const handleCancel = () => setOpenCancelModal(true);
-    const handleSuccess = (id) => {
+    const successHandler = (id) => {
         setOpenSuccessModal(true);
-        setSuccessCategoryId(id);
     }
     
     return (
@@ -33,37 +38,30 @@ export default function EditAccountPage() {
                 </Box>
             </Stack>
             <Box mt={4} display='flex' width={1} justifyContent='center'>
-                <AccountsForm
+                {user && <AccountsForm
                 editMode
                 user={
-                    {
-                        id: 1,
-                        name: 'Trần Văn Minh',
-                        phonenumber: '034215525',
-                        email: 'minhtran@gmail.com',
-                        address: 'TP Thu Duc, HCMC',
-                        role: 0,
-                        image: '/imgs/watermelon.jpg',
-                    }
+                    user
                 }
-                handleCancel={handleCancel} handleSuccess={handleSuccess}/>
+                handleCancel={handleCancel} 
+                onSuccess={successHandler}/>}
             </Box>
 
             <StyledModal open={openCancelModal} handleClose={() => setOpenCancelModal(false)} handleContinue={() => {
                 setOpenCancelModal(false);
-                navigate('/categories')
+                navigate('/accounts')
             }} title={'Are you sure to continue?'} content={'If you continue, the current category data will be removed'} />
 
             <SuccessConfirmModal 
             open={openSuccessModal} 
-            handleClose={() => navigate('/categories')}
+            handleClose={() => navigate('/accounts')}
             handleContinue={() => {
                 setOpenSuccessModal(false);
-                navigate('/categories/new-category')
+                navigate(`/accounts/edit/${id}`)
             }}
-            title={'Category Created Successfully'}
-            content={`The category was created with ID: ${successCategoryId}`}
-            link={`/categories/${successCategoryId}`}    
+            title={'Account updated Successfully'}
+            content={`User updated with ID: ${id}`}
+            link={`/accounts/${id}`}    
             />
         </Container>
     )

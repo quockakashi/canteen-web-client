@@ -2,7 +2,7 @@ import { Delete, Remove, Upload, UploadFile } from "@mui/icons-material";
 import { Box, IconButton, Stack, Typography, useTheme } from "@mui/material";
 import { useMemo, useState } from "react";
 
-export default function FileInput({defaultImage}) {
+export default function FileInput({defaultImage, onChange}) {
     const [ image, setImage ] = useState(defaultImage || null);
     const [ fileName, setFileName ] = useState('No image selected');
     const theme = useTheme();
@@ -13,12 +13,14 @@ export default function FileInput({defaultImage}) {
         if(e.target.files.length > 0) {
             setFileName(e.target.files[0].name);
             setImage(URL.createObjectURL(e.target.files[0]));
+            onChange(e.target.files[0]);
         }
     } ), []);
     const handleRemoveImage = useMemo(() => ((e) => {
         document.querySelector('#img-input-component').value = '';
         setImage(null);
         setFileName('');
+        onChange(null);
     } ), []);
     return (
         <Box>

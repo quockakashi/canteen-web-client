@@ -29,19 +29,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
 
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
-
-export default function RevenueProductTable() {
+export default function RevenueProductTable({rows}) {
     const theme = useTheme();
     const isMediumScreen = useMediaQuery(theme.breakpoints.up('md'))
     const isSmallScreen = useMediaQuery(theme.breakpoints.up('sm'));
@@ -50,8 +39,8 @@ export default function RevenueProductTable() {
       <Table sx={{ minWidth: isMediumScreen ? '800px' :   isSmallScreen ? '600px' : '500px' }} aria-label="customized table">
         <TableHead>
           <TableRow>
-            <StyledTableCell>Dessert (100g serving)</StyledTableCell>
-            <StyledTableCell align="right">Total Revenue</StyledTableCell>
+            <StyledTableCell>Product</StyledTableCell>
+            <StyledTableCell align="right">Total Revenue (VND)</StyledTableCell>
             <StyledTableCell align="right">Total selling</StyledTableCell>
             <StyledTableCell align="right">Created At</StyledTableCell>
           </TableRow>
@@ -62,9 +51,9 @@ export default function RevenueProductTable() {
               <StyledTableCell component="th" scope="row">
                 {row.name}
               </StyledTableCell>
-              <StyledTableCell align="right">{row.calories}</StyledTableCell>
-              <StyledTableCell align="right">{row.fat}</StyledTableCell>
-              <StyledTableCell align="right">{row.carbs}</StyledTableCell>
+              <StyledTableCell align="right">{row.total}</StyledTableCell>
+              <StyledTableCell align="right">{row.count}</StyledTableCell>
+              <StyledTableCell align="right">{new Date(row.createdAt).toLocaleDateString('en-UK', {dateStyle: 'medium'})}</StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>

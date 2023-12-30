@@ -3,6 +3,8 @@ import { BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Bar } from 'rec
 import { revenueByMonthsData } from '../data'
 import { useTheme } from '@mui/material'
 import { Box, Stack, Typography, alpha, useMediaQuery } from '@mui/material';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 
 export const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
@@ -31,7 +33,7 @@ export const CustomTooltip = ({ active, payload, label }) => {
             width={1}
             flex={1}
             justifyContent='center' alignItems='center'>
-                <Typography>${payload[0].value}</Typography>
+                <Typography>VND{payload[0].value}</Typography>
             </Stack>
         </Box>
       )
@@ -41,13 +43,14 @@ export const CustomTooltip = ({ active, payload, label }) => {
   };
 
 export default function 
-CustomBarChart() {
+CustomBarChart({data}) {
     const theme = useTheme();
     const isLargeScreen = useMediaQuery(theme.breakpoints.up('lg'));
     const isMediumScreen = useMediaQuery(theme.breakpoints.up('md'));
 
+
     return (
-    <BarChart width={isLargeScreen ?  700 : isMediumScreen ? 550 : 500} height={250} data={revenueByMonthsData} barGap={5} barSize={18}>
+    <BarChart width={isLargeScreen ?  700 : isMediumScreen ? 550 : 500} height={250} data={data} barGap={5} barSize={18}>
         <CartesianGrid vertical={false} stroke={theme.palette.grey[400]} />
         <XAxis 
             dataKey="name"
@@ -59,6 +62,6 @@ CustomBarChart() {
             tickLine={false}
             style={{ fontSize: "10px" }}/>
         <Tooltip content={<CustomTooltip />} filterNull cursor={{fill: 'transparent'}} />
-        <Bar dataKey="dollars" fill={theme.palette.primary.dark} radius={[5, 5, 0, 0]} />
+        <Bar dataKey="total" fill={theme.palette.primary.dark} radius={[5, 5, 0, 0]} />
     </BarChart>)
 } 

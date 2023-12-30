@@ -2,13 +2,14 @@ import { alpha, useTheme } from '@mui/material';
 import Chart from 'react-apexcharts';
 
 export default function CustomPieChart({data}) {
+  console.log(data)
   const theme = useTheme()
   return (
     <Chart
       type='donut'
       width={350}
       height={350}
-      series={[45, 67, 89, 34, 43, 98]}
+      series={data.map(elem => elem.total)}
 
       options={{
         chart: {
@@ -16,7 +17,7 @@ export default function CustomPieChart({data}) {
             enabled: true,
           },
         },
-        labels: ['USA', 'China', 'Russia', 'India', 'UK', 'Vietnam'],
+        labels: data.map((elem) => elem.category),
         legend: {
           position: 'bottom',
           fontFamily: 'Inter, sanserif'

@@ -1,85 +1,28 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import moment from 'moment'
 import { Box, Stack, Typography, useTheme } from '@mui/material';
 import FilledSelect from '../../components/filled-select-form';
+import axios from 'axios';
 
 
 const columns = [
     { 
-        field: 'Time', 
+        field: 'date', 
         headerName: 'Time', 
         flex: 1,
-        valueGetter: (params) => {
-            return moment(params.row.time).format('DD/MM/YYYY');
-        },
         align: 'center',
         headerAlign: 'center'
     },
     {
-        field: 'amount',
-        headerName: 'Amount',
+        field: 'total',
+        headerName: 'Amount (VND)',
         flex: 1,
-        valueGetter: (params) => {
-            return params.row.amount + ' VND'
-        },
         align: 'center',
         headerAlign: 'center'
     },
 ];
 
-const rows = [
-    {
-        id: 1,
-        'time': '2022-10-16T14:45:00.000Z',
-        'amount': 10000,
-      },
-      {
-        id: 2,
-        time: '2022-10-16T14:45:00.000Z',
-        'amount': 10000,
-      },
-      {
-        id: 3,
-        time: '2022-10-17T09:20:00.000Z',
-        'amount': 10000,
-      },
-      {
-        id: 4,
-        time: '2022-10-18T08:15:00.000Z',
-        'amount': 10000,
-      },
-      {
-        id: 5,
-        time: '2022-10-19T17:00:00.000Z',
-        'amount': 10000,
-      },
-      {
-        id: 6,
-        time: '2022-10-20T13:10:00.000Z',
-        'amount': 10000,
-      },
-      {
-        id: 7,
-        time: '2022-10-21T11:45:00.000Z',
-        'amount': 10000,
-      },
-      {
-        id: 8,
-        time: '2022-10-22T20:30:00.000Z',
-        'amount': 10000,
-      },
-      {
-        id: 9,
-        time: '2022-10-23T09:05:00.000Z',
-        'amount': 10000,
-      },
-      {
-        id: 10,
-        time: '2022-10-24T16:40:00.000Z',
-        'amount': 10000,
-      },
-];
 
 
 
@@ -90,6 +33,10 @@ export default function RevenueTable() {
     const [page, setPage] = useState(0);
     const [dense, setDense] = useState(false);
     const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [data, setData] = useState([]);
+    useEffect(() => {
+      axios.get(`${process.env.REACT_APP_BASE_URL}/api/revenue/by-days`).then(res => setData(res.data.data));
+    }, [])
 
 
   const handleRequestSort = (event, property) => {
@@ -114,7 +61,7 @@ const listItem = [
 ]
 
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
 
 
   return (
@@ -138,7 +85,8 @@ const listItem = [
                 defaultValue={'by-day'}  />
     </Stack>
       <DataGrid
-        rows={rows}
+        rows={data}
+        getRowId={(row) => row.date}
         columns={columns}
         initialState={{
           pagination: {

@@ -39,7 +39,7 @@ const data = [{
     subtotal: 23424,
 }]
 
-export default function InvoicePdf() {
+export default function InvoicePdf({order}) {
     const [ orderQrCode, setOrderQrCode ] = useState('');
     useEffect(() => {
         const getOrderQr = async(id) => {
@@ -51,7 +51,7 @@ export default function InvoicePdf() {
             }
         }
 
-        getOrderQr("3242352");
+        getOrderQr(order._id);
     }, [])
     return (
         <Document>
@@ -65,8 +65,8 @@ export default function InvoicePdf() {
 
                 <View style={{margin: '8px 0', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                     <View>
-                        <Text>ID: 21312412</Text>
-                        <Text>12/10/2023 12:00:00 PM</Text>
+                        <Text>ID: {order._id}</Text>
+                        <Text>{order.createdAt}</Text>
                     </View>
                     <View>
                         <Image src={orderQrCode} style={{width: 50, height: 50}} />
@@ -74,21 +74,21 @@ export default function InvoicePdf() {
                 </View>
 
                 <View style={styled.table}>
-                    {data.map(product => (
-                        <View key={product.id} style={styled.tableRow}>
+                    {order.products.map(elem => (
+                        <View key={elem.product.name} style={styled.tableRow}>
                             <Text style={{width: '40%'}}>
-                                {product.product}
+                                {elem.product.name}
                             </Text>
                             <Text style={{width: '20%'}}>
-                                x{product.quantity}
+                                x{elem.quantity}
                             </Text>
                             <Text style={{width: '40%'}}>
-                                {product.subtotal} VND
+                                {elem.product.price * elem.quantity} VND
                             </Text>
                         </View>
                     ))}
                     <View style={{marginTop: '6px', width: '100%', textAlign: 'end', justifyContent: 'flex-end'}}>
-                        <Text style={{fontWeight: 'bold'}}>Total: {data.reduce((acc, row) => acc + row['subtotal'], 0)}VND</Text>
+                        <Text style={{fontWeight: 'bold'}}>Total: {order.products.reduce((acc, row) => acc += row.product.price * row.quantity, 0)}VND</Text>
                     </View>
                 </View>
                 <View style={{textAlign: 'center', marginTop: '12px'}}>

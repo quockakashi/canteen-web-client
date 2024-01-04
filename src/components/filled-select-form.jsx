@@ -6,12 +6,11 @@ import Select from '@mui/material/Select';
 import { Stack, useTheme } from '@mui/material';
 import { FilterList } from '@mui/icons-material';
 
-export default function FilledSelect({handleChange, listItem, defaultValue, ...other}) {
-  const [ value, setValue ] = React.useState(defaultValue);
+export default function FilledSelect({handleChange, listItem, value, ...other}) {
   const theme = useTheme();
 
   const changeHandler = (event) => {
-    setValue(event.target.value);
+    handleChange(event.target.value);
   };
 
   return (

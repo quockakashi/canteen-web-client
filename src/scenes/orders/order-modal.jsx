@@ -5,6 +5,10 @@ import { ButtonGroup, Card, CardContent, IconButton, Paper, Stack, Table, TableB
 import { Close } from '@mui/icons-material';
 import { StatusBox } from './order-table';
 import styled from '@emotion/styled';
+import OrdersPage from './pages';
+import { current } from '@reduxjs/toolkit';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import InvoicePdf from './invoice-pdf';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -26,20 +30,8 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
       border: 0,
     },
   }));
-  
-  function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-  }
-  
-  const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-  ];
-  
-  export const OrderDetailTable = () => {
+
+  export const OrderDetailTable = ({products}) => {
       const theme = useTheme();
     return (
       <TableContainer component={Paper}>
@@ -53,14 +45,14 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {products.map((row) => (
               <StyledTableRow key={row.name}>
                 <StyledTableCell component="th" scope="row" >
-                  {row.name}
+                  {row.product.name}
                 </StyledTableCell>
-                <StyledTableCell align="center">{row.calories}</StyledTableCell>
-                <StyledTableCell align="center">{row.fat}</StyledTableCell>
-                <StyledTableCell align="center">{row.carbs}</StyledTableCell>
+                <StyledTableCell align="center">{row.quantity}</StyledTableCell>
+                <StyledTableCell align="center">{row.product.price}</StyledTableCell>
+                <StyledTableCell align="center">{row.product.price * row.quantity}</StyledTableCell>
               </StyledTableRow>
             ))}
           </TableBody>
@@ -85,7 +77,7 @@ const boxStyle = (theme) => ({
 
   
 
-export default function OrderModal({open, handleClose, id}) {
+export default function OrderModal({open, handleClose, order}) {
     const theme = useTheme();
   return (
     <Modal
@@ -103,22 +95,22 @@ export default function OrderModal({open, handleClose, id}) {
             <CardContent sx={{width: 1, pb: 0}} >
                 <Typography variant='h5'>Order <Typography
                 color='primary'
-                display='inline-block' variant='subtitle2'>#{id}</Typography></Typography>
+                display='inline-block' variant='subtitle2'>#{order._id}</Typography></Typography>
             </CardContent>
             <CardContent component={Stack} spacing={1}>
-                <Typography>Created At: 22/10/2023</Typography>
+                <Typography>Created At: {new Date(order.createdAt).toLocaleDateString('en-UK', {dateStyle: 'medium'})}</Typography>
                 <Stack direction='row' alignItems='center' spacing={0.5}>
                     <Typography>Status: </Typography>
-                    <StatusBox status={'processing'}></StatusBox>
+                    <StatusBox status={order.status}></StatusBox>
                 </Stack>
                 <ButtonGroup sx={{mb: 2}}>
-                    <Button sx={{textTransform: 'none'}}>Export invoice</Button>
+                    <Button sx={{textTransform: 'none'}}><PDFDownloadLink document={<InvoicePdf order={order} />} >Export invoice</PDFDownloadLink></Button>
                 </ButtonGroup>
                 <Stack spacing={1}>
-                    <OrderDetailTable />
+                    <OrderDetailTable products={order.products} />
                     <Typography 
                     fontWeight='bold'
-                    alignSelf='flex-end'>Total: 100000 VND</Typography>
+                    alignSelf='flex-end'>Total: {order.products.reduce((accumulate, current) => {return accumulate += current.product.price * current.quantity}, 0)} VND</Typography>
                 </Stack>
             </CardContent>
         </Card>

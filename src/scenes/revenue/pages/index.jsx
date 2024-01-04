@@ -1,6 +1,5 @@
 import { Box, Button, Container, Grid, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { FileDownload } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
 import ImgBgSummaryBox from "../../../components/summary-box-with-bg";
 import SummaryBox from "../../../components/summary-box";
 import RevenueBarChart from "../revenue-bar-chart";
@@ -8,6 +7,8 @@ import RevenuePieChart from "../revenue-pie-chart";
 import RevenueTable from "../revenue-table";
 import RevenueLineChart from "../revenue-line-chart";
 import { Helmet } from "react-helmet";
+import axios from 'axios';
+import { useEffect, useState } from "react";
 
 const scrollToIndex = () => {
     const element = document.getElementById('revenue-table');
@@ -19,7 +20,10 @@ const scrollToIndex = () => {
 export default function RevenuePage() {
     const theme = useTheme();
     const isSmallDownScreen = useMediaQuery(theme.breakpoints.down('sm'))
-    const navigate = useNavigate();
+    const [summaryValue, setSummaryValue] = useState({});
+    useEffect(() => {
+        axios.get(`${process.env.REACT_APP_BASE_URL}/api/revenue/summary`).then(res => setSummaryValue(res.data.data));
+    }, []);
 
     return (
         <Container maxWidth='xl'>
@@ -50,7 +54,7 @@ export default function RevenuePage() {
                 <Grid item xs={12} sm={6} md={3}>
                     <ImgBgSummaryBox 
                         label={'Total'}
-                        value={'100M VND'}
+                        value={summaryValue.total + ' VND'}
                         imgUrl={"url('/imgs/revenue.svg')"}
                         bgcolor={theme.palette.primary.light}
                         linkColor={theme.palette.primary.dark}
@@ -60,21 +64,21 @@ export default function RevenuePage() {
                 <Grid item xs={12} sm={6} md={3}>
                     <SummaryBox 
                         label={'Today'} 
-                        value={'100K VND'} 
+                        value={summaryValue.today} 
                         increaseAmount={10}
                     />
                 </Grid>
                 <Grid item xs={12} sm={6} md={3}>
                     <SummaryBox 
                         label={'This month'} 
-                        value={'10M VND'} 
+                        value={summaryValue.this_month} 
                         increaseAmount={10}
                     />
                 </Grid>
                 <Grid item xs={12} sm={6} md={3}>
                     <SummaryBox 
                         label={'This year'} 
-                        value={'80M VND'} 
+                        value={summaryValue.this_year} 
                         increaseAmount={-10}
                     />
                 </Grid>

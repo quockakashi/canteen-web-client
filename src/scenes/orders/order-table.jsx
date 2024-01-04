@@ -1,13 +1,14 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import moment from 'moment'
 import { Box,alpha, useTheme } from '@mui/material';
 import EnhancedTableToolbar from "./order-toolbar-table";
 import OrderModal from './order-modal';
+import axios from 'axios'
 
 const switchStatusBgColor = (status, theme) => {
     switch(status.toLowerCase()) {
-        case 'finished': 
+        case 'completed': 
             return alpha(theme.palette.success.main, 0.8);
             break;
         case 'processing':
@@ -39,13 +40,16 @@ export const StatusBox = ({status}) => {
 
 const columns = [
     { 
-        field: 'id',
+        field: '_id',
         headerName: 'ID',
         flex: 0.5 
     },
     { 
         field: 'products',
         headerName: 'Products', 
+        valueGetter: (params) => {
+          return params.row.products.map(elem => elem.product.name).join(', ')
+        },
         flex: 1.5, 
         sortable: false,
     },
@@ -155,20 +159,25 @@ export default function OrderTable() {
     const [dense, setDense] = useState(false);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [ openDetailOrder, setOpenDetailOrder] = useState(false);
-    const [ detailProductId, setDetailProductId] = useState('');
+    const [ detailOrder, setDetailOrder] = useState(null);
     const [ sortModel, setSortModel ] = useState([{
       field: 'createdAt',
       sort: 'desc'
     }])
+    const [ rows, setRows ] = useState([]);
+    useEffect(() => {
+      axios.get(`${process.env.REACT_APP_BASE_URL}/api/orders`).then((res) => setRows(res.data.data))
+    }, [])
 
   const handleRowClick = (params) => {
-    setDetailProductId(params.row.id);
+    setDetailOrder(params.row);
     setOpenDetailOrder(true);
   }
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
+  
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
@@ -198,6 +207,7 @@ export default function OrderTable() {
     >
         <EnhancedTableToolbar theme={theme} numSelected={selected.length} />
       <DataGrid
+        getRowId={row  => row._id}
         onRowClick={handleRowClick}
         disableRowSelectionOnClick
         rows={rows}
@@ -219,7 +229,7 @@ export default function OrderTable() {
         rowSelectionModel={selected}
         onRowSelectionModelChange={(newSelected) => setSelected(newSelected)}
       />
-      <OrderModal open={openDetailOrder} id={detailProductId} handleClose={() => setOpenDetailOrder(false)}></OrderModal>
+      {detailOrder && <OrderModal open={openDetailOrder} order={detailOrder} handleClose={() => setOpenDetailOrder(false)}></OrderModal>}
     </Box>
   );
 }

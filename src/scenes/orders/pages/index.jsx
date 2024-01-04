@@ -4,11 +4,17 @@ import OrderTable from "../order-table";
 import { Add, FileDownload } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import ImgBgSummaryBox from "../../../components/summary-box-with-bg";
+import { useEffect, useState } from "react";
+import axios from 'axios';
 
 export default function OrdersPage() {
     const theme = useTheme();
     const isSmallDownScreen = useMediaQuery(theme.breakpoints.down('sm'))
     const navigate = useNavigate();
+    const [summaryData, setSummaryData] = useState({});
+    useEffect(() => {
+        axios.get(`${process.env.REACT_APP_BASE_URL}/api/orders/summary`).then(res => setSummaryData(res.data.data));
+    }, [])
 
     return (
         <Container maxWidth='xl'>
@@ -51,7 +57,7 @@ export default function OrdersPage() {
                         <ImgBgSummaryBox
                             details={false}
                             label={'Orders'}
-                            value={'10K'}
+                            value={summaryData.total}
                             imgUrl={"url('/imgs/order-bg-box.svg')"}
                             bgcolor={alpha(theme.palette.blue.main, 0.7)}
                         />
@@ -60,7 +66,7 @@ export default function OrdersPage() {
                     <ImgBgSummaryBox
                         details={false}
                         label={'Processing'}
-                        value={'20'}
+                        value={summaryData.in_process}
                         imgUrl={"url('/imgs/processing-bg.svg')"}
                         bgcolor={alpha(theme.palette.warning.main, 0.7)}
                     />
@@ -68,8 +74,8 @@ export default function OrdersPage() {
                 <Grid item xs={12} sm={6} md={3}>
                 <ImgBgSummaryBox
                         details={false}
-                        label={'Finished'}
-                        value={'9.580'}
+                        label={'Completed'}
+                        value={summaryData.completed}
                         imgUrl={"url('/imgs/complete-bg.svg')"}
                         bgcolor={alpha(theme.palette.success.main, 0.7)}
                     />
@@ -78,7 +84,7 @@ export default function OrdersPage() {
                     <ImgBgSummaryBox
                             details={false}
                             label={'Canceled'}
-                            value={'400'}
+                            value={summaryData.canceled}
                             imgUrl={"url('/imgs/cancel-bg.svg')"}
                             bgcolor={alpha(theme.palette.error.main, 0.7)}
                         />

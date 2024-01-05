@@ -47,24 +47,24 @@ export default function CreateProductPage() {
                 </Stack>
             </Stack>
             <Box mt={4} display='flex' width={1} justifyContent='center'>
-                <CreateProductForm handleCancel={handleCancel} handleSuccess={handleSuccess} editMode={false}/>
+                <CreateProductForm handleCancel={handleCancel} handleSucces={handleSuccess} editMode={false}/>
             </Box>
 
             <StyledModal open={openCancelModal} handleClose={() => setOpenCancelModal(false)} handleContinue={() => {
                 setOpenCancelModal(false);
-                navigate('/categories')
-            }} title={'Are you sure to continue?'} content={'If you continue, the current category data will be removed'} />
+                navigate('/products')
+            }} title={'Are you sure to continue?'} content={'If you continue, the current product data will be removed'} />
 
             <SuccessConfirmModal 
             open={openSuccessModal} 
-            handleClose={() => navigate('/categories')}
+            handleClose={() => navigate('/products')}
             handleContinue={() => {
                 setOpenSuccessModal(false);
-                navigate('/categories/new-category')
+                navigate('/products/new-product')
             }}
-            title={'Category Created Successfully'}
-            content={`The category was created with ID: ${successCategoryId}`}
-            link={`/categories/${successCategoryId}`}    
+            title={'Product Created Successfully'}
+            content={`The product was created with ID: ${successCategoryId}`}
+            link={`/products/${successCategoryId}`}    
             />
         </Container>
     )

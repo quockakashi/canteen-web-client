@@ -23,6 +23,7 @@ export default  function EditProductPage() {
     }, []);
     const handleCancel = () => setOpenCancelModal(true);
     const handleConfirm = () => {
+        setOpenSuccessModal(true);
     }
     if(!isloading){
 
@@ -44,24 +45,24 @@ export default  function EditProductPage() {
                 <CreateProductForm
                  editMode={true}
                  product={product}
-                 handleCancel={handleCancel} handleConfirm={handleConfirm}/>
+                 handleCancel={handleCancel} handleSucces={handleConfirm}/>
             </Box>
 
             <StyledModal open={openCancelModal} handleClose={() => setOpenCancelModal(false)} handleContinue={() => {
                 setOpenCancelModal(false);
-                navigate('/categories')
-            }} title={'Are you sure to continue?'} content={'If you continue, the current category data will be removed'} />
+                navigate('/products')
+            }} title={'Are you sure to continue?'} content={'If you continue, the current product data will be removed'} />
 
             <SuccessConfirmModal 
             open={openSuccessModal} 
-            handleClose={() => navigate('/categories')}
+            handleClose={() => navigate('/products')}
             handleContinue={() => {
                 setOpenSuccessModal(false);
-                navigate('/categories/new-category')
+                navigate('/products/new-product')
             }}
-            title={'Category Created Successfully'}
-            content={`The category was created with ID: ${successCategoryId}`}
-            link={`/categories/${successCategoryId}`}    
+            title={'Product Edited Successfully'}
+            content={`The product was edited ID: ${successCategoryId}`}
+            link={`/products/${successCategoryId}`}    
             />
         </Container>
     )

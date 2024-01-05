@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import axios from 'axios';
 
 
-export default function CreateProductForm({editMode, product, handleCancel, handleConfirm}) {
+export default function CreateProductForm({editMode, product, handleCancel, handleSucces}) {
     
    
     const theme = useTheme();
@@ -21,6 +21,11 @@ export default function CreateProductForm({editMode, product, handleCancel, hand
     const [ productCat, setProductCat ] = useState((editMode===true)?product.category:[]);
     const [image,setImage]=useState((editMode)?product.image:'');
     const [file,setFile]=useState(null);
+    const checkValid=()=>{
+        if(!productCat){
+            
+        }
+    }
     const handleContinue = () => {
         console.log('Hello');
         let formData=new FormData();
@@ -34,9 +39,9 @@ export default function CreateProductForm({editMode, product, handleCancel, hand
             formData.append('image',file);
         }
         if(editMode){
-            axios.patch(`${process.env.REACT_APP_BASE_URL}/api/products/${product._id}`, formData);
+            axios.patch(`${process.env.REACT_APP_BASE_URL}/api/products/${product._id}`, formData).then(res=>{handleSucces(res.data._id)});
         }else{
-            axios.post(`${process.env.REACT_APP_BASE_URL}/api/products`, formData);
+            axios.post(`${process.env.REACT_APP_BASE_URL}/api/products`, formData).then(res=>{handleSucces(res.data._id)});
         }
     };
 
@@ -74,7 +79,7 @@ export default function CreateProductForm({editMode, product, handleCancel, hand
                     </Grid>
                     <Grid item xs={8} md={5}>
                         <SelectInput2 handleChange={(id)=>setProductCat(listCategory.find(obj=> {return obj._id===id}))} 
-                          defaultValue={(editMode)?productCat._id:[]} listItem={listCategory}   />
+                          defaultValue={(editMode)?productCat._id:undefined} listItem={listCategory}   />
                     </Grid>
                 </Grid>
                 <Grid container alignItems='center'>

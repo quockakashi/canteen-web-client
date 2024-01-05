@@ -1,7 +1,7 @@
 import { Card, CardActions, CardContent, Checkbox, Grid, Stack, TextField, Typography, alpha, useMediaQuery, useTheme } from "@mui/material";
 import { ActionButton } from "../../components/action-button";
 import { useState,useEffect } from "react";
-import axios from 'axios';
+import axios from 'axios'
 export default function CreateCategoryForm({editMode, category, handleCancel, handleSuccess}) {
     const theme = useTheme();
     const isMediumScreen = useMediaQuery(theme.breakpoints.up('md'));
@@ -9,14 +9,18 @@ export default function CreateCategoryForm({editMode, category, handleCancel, ha
     const [ description, setDescription ] = useState( editMode ? category.description : '');
     const [ enabled, setEnabled ] = useState( editMode ? category.enabled : true );
     const handleContinue = () => {
-        const formData=new FormData();
+        let formData=new FormData();
         formData.append('name',catName);
         formData.append('description',description);
         formData.append('enabled',enabled);
+        let obj={};
+        for(let key of formData.keys()){
+            obj[key]=formData.get(key);
+        }
         if(editMode) {
-            axios.patch(`${process.env.REACT_APP_BASE_URL}/api/categories/${category._id}}`, formData).then(res => handleSuccess(res.data.data._id));
+            axios.patch(`${process.env.REACT_APP_BASE_URL}/api/categories/${category._id}`, obj).then(res => handleSuccess(res.data.data._id));
         } else {
-            axios.post(`${process.env.REACT_APP_BASE_URL}/api/categories`, formData).then(res => handleSuccess(res.data.data._id));
+            axios.post(`${process.env.REACT_APP_BASE_URL}/api/categories`, obj).then(res => handleSuccess(res.data.data._id));
         }
     };
 

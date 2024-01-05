@@ -1,7 +1,7 @@
 import { MenuItem, Select } from "@mui/material";
 import { useState } from "react";
 
-export default function SelectInput({listItem, handleChange, defaultValue}) {
+export default function SelectInput2({listItem, handleChange, defaultValue}) {
     const onChange = (e) => {
         handleChange(e.target.value)
     }
@@ -24,11 +24,10 @@ export default function SelectInput({listItem, handleChange, defaultValue}) {
           }}
         >
           {listItem.map((item => 
-            <MenuItem key={item.value} value={item.value}>
-              {item.text}
+            <MenuItem key={item._id} value={item._id}>
+              {item.name}
             </MenuItem>)
           )}
         </Select>
     )
 }
-

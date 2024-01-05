@@ -5,11 +5,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import CategoriesTable from "../categories-table";
 import CreateCategoryForm from "../create-category-form";
 import StyledModal from "../../../components/modal";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import SuccessConfirmModal from "../../../components/success-confirm-modal";
 import { Helmet } from "react-helmet";
-
-export default function EditCategoryPage() {
+import axios from 'axios';
+export default function EditCategoryPage({data}) {
     const theme = useTheme();
     const isSmallDownScreen = useMediaQuery(theme.breakpoints.down('sm'))
     const navigate = useNavigate();
@@ -17,13 +17,19 @@ export default function EditCategoryPage() {
     const [openSuccessModal, setOpenSuccessModal] = useState(false);
     const [ successCategoryId, setSuccessCategoryId] = useState('');
     const params = useParams();
-
+    const id=params.id;
     const handleCancel = () => setOpenCancelModal(true);
-    const handleSuccess = (id) => {
+    const handleSuccess = (id) => {        
         setOpenSuccessModal(true);
         setSuccessCategoryId(id);
-    }
-    
+    }    
+    const [loading,setLoading]=useState(false);
+    const [category,setCategory]=useState([]);
+    useEffect(() => {
+        axios.get(`${process.env.REACT_APP_BASE_URL}/api/categories/${id}`).then(res => {setCategory(res.data.category); setLoading(true);})
+    }, []);
+    console.log(id);
+    if(loading)
     return (
         <Container maxWidth='xl'>
             <Helmet>
@@ -42,11 +48,7 @@ export default function EditCategoryPage() {
                     editMode={true}  
                     handleCancel={handleCancel} 
                     handleSuccess={handleSuccess}
-                    category={{
-                        name: 'Milks and milk product',
-                        description: '',
-                        enabled: true,
-                    }}
+                    category={category}
                 />
             </Box>
 

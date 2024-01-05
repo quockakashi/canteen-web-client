@@ -5,7 +5,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useState } from "react";
 import { Field, Form, Formik } from "formik";
 import { loginSchema } from "../../schemas";
-
+import axios from 'axios';
 export default function LoginPage() {
     const theme = useTheme();
     const navigate = useNavigate();
@@ -14,7 +14,11 @@ export default function LoginPage() {
     const handleClickShowPassword = () => setShowPassword(true);
     const handleMouseDownPassword = () => setShowPassword(false);
     const isMediumScreen = useMediaQuery(theme.breakpoints.up('md'));
-
+    const onSuccess=()=>(navigate('/home'));
+    const onSubmit= (values) => {
+       
+        axios.post(`${process.env.REACT_APP_BASE_URL}/api/login`, {'username':values.username,'password':values.password});
+    }
     return (
         <Container 
             maxWidth='xl' 
@@ -35,13 +39,13 @@ export default function LoginPage() {
                 <Typography mt={2} variant="subtitle2" color={theme.palette.primary.dark} >*This project is intended for study purposes only.</Typography>
                 </Stack>
             }
-            <Formik
+            <Formik 
                 initialValues={{
                     username: '',
                     password: '',
                 }}
                 validationSchema={loginSchema}
-                onSubmit={() => {console.log('hello')}}
+                onSubmit={onSubmit}
             >
                 {(props) => (
                     <Form>
@@ -142,11 +146,11 @@ export default function LoginPage() {
                         <Typography component='label' htmlFor="remember-me">Remember me</Typography>
                         <Checkbox />
                     </Stack>
-
-                    <Typography mb={3} variant="subtitle2">
-                        If you forgot your password, please contact to admin!
+                    
+                    <Typography mb={3} variant="subtitle2" visibility={false}>
+                        Invalid Account. If you forgot your password, please contact to admin!
                     </Typography>
-
+                    
                     <Button size="large" type="submit" variant="contained">
                         Login
                     </Button>

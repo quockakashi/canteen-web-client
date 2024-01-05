@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import { Box, Stack, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Fade, List, ListItem, ListItemButton, Popper, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 import CreateNewOrderToolbar from './create-order-toolbar';
 import CreateOrderFooter from './create-order-footer';
 import QuantityInput from '../../components/quantity-input';
+import axios from 'axios';
 
 
 const increaseQtyHandler = (e) => {
@@ -17,9 +18,9 @@ const decreaseQtyHandler = (e) => {
 
 const columns = [
     { 
-        field: 'id',
+        field: '_id',
         headerName: 'Product ID',
-        flex: 0.5 
+        flex: 1.5 
     },
     { 
         field: 'name',
@@ -36,7 +37,9 @@ const columns = [
         field: 'quantity',
         headerName: 'Quantity',
         renderCell: (params) => {
-            return <Stack><QuantityInput defaultValue={1} nonNegative={true} /></Stack>
+            return <Stack><QuantityInput defaultValue={1} nonNegative={true} handleChangeValue={(quantity) =>{
+              params.row.quantity = quantity
+            }} /></Stack>
         },
         flex: 1.5,
         align: 'center',
@@ -54,58 +57,6 @@ const columns = [
 ];
 
 
-const rows = [
-    {
-        id: 1,
-        name: 'Watermelon',
-        price: 200,
-        total: 50,
-        status: 'Processing',
-        quantity: 1,
-      },
-      {
-        id: 2,
-        name: 'Watermelon',
-        price: 200,
-        total: 75,
-        status: 'Finished',
-        quantity: 1,
-      },
-      {
-        id: 3,
-        name: 'Watermelon',
-        price: 200,
-        total: 30,
-        status: 'Finished',
-        quantity: 1,
-      },
-      {
-        id: 4,
-        name: 'Watermelon',
-        price: 200,
-        total: 45,
-        status: 'Canceled',
-        quantity: 1,
-      },
-      {
-        id: 5,
-        name: 'Watermelon',
-        price: 200,
-        total: 60,
-        status: 'Processing',
-        quantity: 1,
-      },
-      {
-        id: 6,
-        name: 'Watermelon',
-        price: 200,
-        total: 80,
-        status: 'Processing',
-        quantity: 1,
-      },
-];
-
-
 export default function CreateOrderForm({handleContinue}) {
     const theme = useTheme();
     const [order, setOrder] = useState('asc');
@@ -115,6 +66,27 @@ export default function CreateOrderForm({handleContinue}) {
     const [dense, setDense] = useState(false);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const isMediumScreen = useMediaQuery(theme.breakpoints.up('md'));
+
+    const [openPopper, setOpenPopper] = useState(false);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [searchProducts, setSearchProducts] = useState([]);
+    const [rows, setRows] = useState([]);
+
+    const handleChangeSearchInput = async (event) => {
+      const value = event.currentTarget.value;
+      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/products?search=${value}`);
+      const products = response.data.data;
+      setSearchProducts(products);
+    }
+
+    const handleFocusInput = (event) => {
+      setAnchorEl(event.currentTarget);
+      setOpenPopper(true);
+    }
+
+    const handleBlurInput = (event) => {
+      setOpenPopper(false);
+    }
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -183,7 +155,7 @@ export default function CreateOrderForm({handleContinue}) {
               },
         }}
     >
-        <CreateNewOrderToolbar numSelected={selected.length} />
+        <CreateNewOrderToolbar numSelected={selected.length} handleChange={handleChangeSearchInput} handleFocus={handleFocusInput} handleBlur={handleBlurInput} />
       <DataGrid
         rows={rows}
         columns={columns}
@@ -194,10 +166,29 @@ export default function CreateOrderForm({handleContinue}) {
                 bgcolor: '#0000'
             }
         }}
+        getRowId={row => row._id}
         rowSelectionModel={selected}
         onRowSelectionModelChange={(newSelected) => setSelected(newSelected)}
         components={{
-            Footer: () => <CreateOrderFooter total={1000} handleContinue={handleContinue}/>
+            Footer: () => <CreateOrderFooter total={rows.reduce((sum, current) => current.price * current.quantity + sum, 0)} handleContinue={async() => {
+              const productReduce = rows.map((product) => ({
+                product: product._id,
+                quantity: product.quantity,
+              }))
+
+              const json = JSON.stringify({
+                products: productReduce
+              })
+              const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/orders`, json, {
+                headers: {
+                  'Content-Type': 'application/json',
+                }
+              })
+
+              const orderId = res.data.data._id;
+              const order = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/orders/${orderId}`)
+              handleContinue(order.data.data);
+            }}/>
         }}
 
         disableColumnFilter
@@ -205,6 +196,33 @@ export default function CreateOrderForm({handleContinue}) {
         disableColumnSelector
         disableRowSelectionOnClick
       />
+      <Popper open={openPopper} anchorEl={anchorEl} placement='bottom-start' transition sx={{mt: 3}}>
+        {({ TransitionProps }) => (
+          <Fade {...TransitionProps} timeout={350}>
+            <Box sx={{bgcolor: 'background.paper' }}>
+            <List>
+                {searchProducts.map((product, index) => (
+                  <ListItemButton id={index} disabled={!product.stock} onClick={() => setRows(prev => {
+                    if(rows.find(item => item._id == product._id)) {
+                      return [...prev]
+                    } else {
+                      return [...prev, {...product, quantity: 1}]
+                    }
+                  })}>
+                      <Box component={'img'} src={product.image}width={30} height={30}></Box>
+                      <Typography ml={3}>
+                        {product.name}
+                      </Typography>
+                      <Typography variant='subtitle2' ml={3} color={product.stock > 0 ? theme.palette.success.main : theme.palette.danger.main}>
+                         {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
+                      </Typography>
+                  </ListItemButton>
+                ))}
+              </List>
+            </Box>
+          </Fade>
+        )}
+      </Popper>
     </Box>
   );
 }

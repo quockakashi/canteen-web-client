@@ -2,7 +2,7 @@ import { Delete, Search } from "@mui/icons-material";
 import { Box, IconButton, InputBase, Toolbar, Tooltip, Typography, alpha } from "@mui/material";
 
 export default function CreateNewOrderToolbar(props) {
-    const { numSelected } = props;
+    const { numSelected, handleChange, handleFocus, handleBlur } = props;
   
     return (
       <Toolbar
@@ -32,7 +32,7 @@ export default function CreateNewOrderToolbar(props) {
             px={2}
             mr={3}
         >
-            <InputBase placeholder="Search product">
+            <InputBase placeholder="Search product" onFocus={handleFocus} onChange={handleChange} onBlur={handleBlur}>
             </InputBase>
             <IconButton>
                 <Search />

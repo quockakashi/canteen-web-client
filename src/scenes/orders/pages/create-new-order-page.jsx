@@ -14,6 +14,7 @@ export default function CreateOrderPage() {
     const navigate = useNavigate();
     const [ detailOrderId, setDetailOrderId ] = useState(null);
     const [ openDetailOrder, setOpenDetailOrder ] = useState(false);
+    const [successOrder, setSuccessOrder] = useState(null);
 
     const handleSuccess = useMemo(() => (() => {
         setOpenSuccessModal(false);
@@ -24,6 +25,12 @@ export default function CreateOrderPage() {
         setOpenSuccessModal(false);
         navigate('/orders');
     }))
+
+    const handleSuccessOrder = (order) => {
+        console.log(order)
+        setSuccessOrder(order);
+        setOpenSuccessModal(true);
+    }
 
     const handleContinue = useMemo(() => (() => {
         setOpenSuccessModal(true);
@@ -38,21 +45,16 @@ export default function CreateOrderPage() {
             <Typography variant="subtitle2" mb={4}>
                 Create new orders
             </Typography>
-            <CreateOrderForm handleContinue={handleContinue} />
-            <SuccessConfirmModal handleContinue={handleSuccess} open={openSuccessModal} handleClose={handleClose}
+            <CreateOrderForm handleContinue={handleSuccessOrder} />
+            {successOrder && <SuccessConfirmModal handleContinue={handleSuccessOrder} open={openSuccessModal} handleClose={handleClose}
             title={'Order Created'} content={
                 <Stack spacing={2}>
-                    <Typography variant="body1">The order created successfully with ID: 23412412</Typography>
+                    <Typography variant="body1">The order created successfully with ID: {successOrder._id}</Typography>
                     <Stack direction='row' justifyContent='center' spacing={2}>
-                        <PDFDownloadLink className="link" document={<InvoicePdf />} >Export invoice</PDFDownloadLink>
-                        <Link 
-                            className='link' onClick={() => {
-                                setDetailOrderId(1);
-                                setOpenDetailOrder(true);
-                            }}>View details</Link>
+                        <PDFDownloadLink className="link" document={<InvoicePdf order={successOrder} />} >Export invoice</PDFDownloadLink>
                     </Stack>
                 </Stack>
-            }/>
+            }/>} 
             { detailOrderId && <OrderModal open={openDetailOrder} handleClose={() => setOpenDetailOrder(false)} id={detailOrderId} />}
         </Container>
     )

@@ -2,17 +2,24 @@ import { Add, Remove } from "@mui/icons-material";
 import { ButtonGroup, IconButton, Input, TextField } from "@mui/material";
 import { useState } from "react";
 
-export default function QuantityInput({defaultValue=0, nonNegative=false}) {
+export default function QuantityInput({defaultValue=0, nonNegative=false, handleChangeValue}) {
     const [ value, setValue ] = useState
     (defaultValue);
-    const handleChange = (e) => setValue(parseInt(e.target.value))
+    const handleChange = (e) => {
+        handleChangeValue(parseInt(e.target.value));
+        setValue(parseInt(e.target.value));
+    }
     
     const onIncreaseQty = () => {
-        setValue((value) => value + 1)
+        handleChangeValue(value + 1);
+        setValue((value) => value + 1);
+        
     };
 
     const onDecreaseQty = () => {
-        setValue((value) => value - 1)
+        handleChangeValue(value - 1);
+        setValue((value) => value - 1);
+
     }
 
     return (

@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import moment from 'moment'
-import { Box,alpha, useTheme } from '@mui/material';
+import { Box,IconButton,alpha, useTheme } from '@mui/material';
 import EnhancedTableToolbar from "./order-toolbar-table";
 import OrderModal from './order-modal';
 import axios from 'axios'
+import {CancelOutlined, CheckCircleOutline} from '@mui/icons-material'
 
 const switchStatusBgColor = (status, theme) => {
     switch(status.toLowerCase()) {
@@ -72,80 +73,36 @@ const columns = [
         sortable: false,
         renderCell: (params) => <StatusBox status={params.row.status}></StatusBox>,
         flex: 1
-    }
-];
-
-const rows = [
+    },
     {
-        id: 1,
-        products: ['Product 1', 'Product 2'],
-        createdAt: '2022-10-15T12:30:00.000Z',
-        total: 50,
-        status: 'Processing',
-      },
-      {
-        id: 2,
-        products: ['Product 3', 'Product 4', 'Product 5'],
-        createdAt: '2022-10-16T14:45:00.000Z',
-        total: 75,
-        status: 'Finished',
-      },
-      {
-        id: 3,
-        products: ['Product 6'],
-        createdAt: '2022-10-17T09:20:00.000Z',
-        total: 30,
-        status: 'Finished',
-      },
-      {
-        id: 4,
-        products: ['Product 7', 'Product 8'],
-        createdAt: '2022-10-18T08:15:00.000Z',
-        total: 45,
-        status: 'Canceled',
-      },
-      {
-        id: 5,
-        products: ['Product 9', 'Product 10'],
-        createdAt: '2022-10-19T17:00:00.000Z',
-        total: 60,
-        status: 'Processing',
-      },
-      {
-        id: 6,
-        products: ['Product 11', 'Product 12', 'Product 13'],
-        createdAt: '2022-10-20T13:10:00.000Z',
-        total: 80,
-        status: 'Processing',
-      },
-      {
-        id: 7,
-        products: ['Product 14'],
-        createdAt: '2022-10-21T11:45:00.000Z',
-        total: 25,
-        status: 'Canceled',
-      },
-      {
-        id: 8,
-        products: ['Product 15', 'Product 16'],
-        createdAt: '2022-10-22T20:30:00.000Z',
-        total: 55,
-        status: 'Finished',
-      },
-      {
-        id: 9,
-        products: ['Product 17', 'Product 18', 'Product 19'],
-        createdAt: '2022-10-23T09:05:00.000Z',
-        total: 70,
-        status: 'Finished',
-      },
-      {
-        id: 10,
-        products: ['Product 20'],
-        createdAt: '2022-10-24T16:40:00.000Z',
-        total: 35,
-        status: 'Finished',
-      },
+      headerName: 'Set Status',
+      sortable: false,
+      renderCell: (params) => {
+        const status = params.row.status;
+        if(status == 'processing') {
+          return <Box>
+            <IconButton sx={{mr: 1}} color='success.main' onClick={async(e) => {
+              e.stopPropagation();
+              await axios.get(`${process.env.REACT_APP_BASE_URL}/api/orders/edit-status?id=${params.row._id}&status=completed`);
+              params.row.status = 'completed';
+            }}><CheckCircleOutline /></IconButton>
+            <IconButton onClick={async(e) => {
+              e.stopPropagation();
+              await axios.get(`${process.env.REACT_APP_BASE_URL}/api/orders/edit-status?id=${params.row._id}&status=canceled`);
+              params.row.status = 'canceled';
+            }}><CancelOutlined /></IconButton>
+          </Box>
+        } else if (status == 'completed') {
+            return <Box>
+              <IconButton onClick={async(e) => {
+                e.stopPropagation();
+              await axios.get(`${process.env.REACT_APP_BASE_URL}/api/orders/edit-status?id=${params.row._id}&status=canceled`);
+              params.row.status = 'canceled';
+            }}><CancelOutlined /></IconButton>
+            </Box>
+        }
+      }
+    }
 ];
 
 
@@ -168,6 +125,76 @@ export default function OrderTable() {
     useEffect(() => {
       axios.get(`${process.env.REACT_APP_BASE_URL}/api/orders`).then((res) => setRows(res.data.data))
     }, [])
+
+    const loadOrders = () => {
+        axios.get(`${process.env.REACT_APP_BASE_URL}/api/orders`).then((res) => setRows(res.data.data))
+    };
+
+    const columns = [
+      { 
+          field: '_id',
+          headerName: 'ID',
+          flex: 0.5 
+      },
+      { 
+          field: 'products',
+          headerName: 'Products', 
+          valueGetter: (params) => {
+            return params.row.products.map(elem => elem.product.name).join(', ')
+          },
+          flex: 1.5, 
+          sortable: false,
+      },
+      { 
+          field: 'createdAt', 
+          headerName: 'Created At', 
+          flex: 1,
+          valueGetter: (params) => {
+              return moment(params.row.createdAt).format('DD/MM/YYYY');
+          } 
+      },
+      {
+          field: 'total',
+          headerName: 'Total',
+          flex: 1,
+      },
+      {
+          field: 'status',
+          headerName: 'Status',
+          sortable: false,
+          renderCell: (params) => <StatusBox status={params.row.status}></StatusBox>,
+          flex: 1
+      },
+      {
+        headerName: 'Set Status',
+        sortable: false,
+        renderCell: (params) => {
+          const status = params.row.status;
+          if(status == 'processing') {
+            return <Box>
+              <IconButton sx={{mr: 1}} color='success.main' onClick={async(e) => {
+                e.stopPropagation();
+                await axios.get(`${process.env.REACT_APP_BASE_URL}/api/orders/edit-status?id=${params.row._id}&status=completed`);
+                loadOrders();
+              }}><CheckCircleOutline /></IconButton>
+              <IconButton onClick={async(e) => {
+                e.stopPropagation();
+                await axios.get(`${process.env.REACT_APP_BASE_URL}/api/orders/edit-status?id=${params.row._id}&status=canceled`);
+                loadOrders();
+              }}><CancelOutlined /></IconButton>
+            </Box>
+          } else if (status == 'completed') {
+              return <Box>
+                <IconButton onClick={async(e) => {
+                  e.stopPropagation();
+                await axios.get(`${process.env.REACT_APP_BASE_URL}/api/orders/edit-status?id=${params.row._id}&status=canceled`);
+                loadOrders();
+              }}><CancelOutlined /></IconButton>
+              </Box>
+          }
+        }
+      }
+  ];
 
   const handleRowClick = (params) => {
     setDetailOrder(params.row);
@@ -205,7 +232,9 @@ export default function OrderTable() {
               },
         }}
     >
-        <EnhancedTableToolbar theme={theme} numSelected={selected.length} />
+        <EnhancedTableToolbar theme={theme} numSelected={selected.length} handleFilter={(status) => {
+          axios.get(`${process.env.REACT_APP_BASE_URL}/api/orders?status=${status}`).then((res) => setRows(res.data.data))
+        } } />
       <DataGrid
         getRowId={row  => row._id}
         onRowClick={handleRowClick}

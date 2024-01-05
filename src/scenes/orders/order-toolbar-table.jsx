@@ -3,7 +3,7 @@ import { Box, IconButton, InputBase, Toolbar, Tooltip, Typography, alpha } from 
 import SelectStatus from "./select-status";
 
 export default function EnhancedTableToolbar(props) {
-    const { numSelected, theme } = props;
+    const { numSelected, theme, handleFilter } = props;
 
     return (
       <Toolbar
@@ -49,7 +49,7 @@ export default function EnhancedTableToolbar(props) {
           </Tooltip>
         ) : (
           <>
-            <SelectStatus />
+            <SelectStatus handleFilter={handleFilter} />
           </>
         )}
       </Toolbar>

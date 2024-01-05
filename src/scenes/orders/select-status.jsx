@@ -5,12 +5,17 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { useTheme } from '@mui/material';
 
-export default function SelectStatus() {
+export default function SelectStatus({handleFilter}) {
   const [status, setStatus] = React.useState('all');
   const theme = useTheme();
 
   const handleChange = (event) => {
     setStatus(event.target.value);
+    if(event.target.value == 'all') {
+      handleFilter('');
+    } else {
+      handleFilter(event.target.value);
+    }
   };
 
   return (
@@ -32,7 +37,7 @@ export default function SelectStatus() {
         }}
       >
         <MenuItem value={'all'}>All</MenuItem>
-        <MenuItem value={'finished'}>Finished</MenuItem>
+        <MenuItem value={'completed'}>Completed</MenuItem>
         <MenuItem value={'processing'}>Processing</MenuItem>
         <MenuItem value={'canceled'}>Canceled</MenuItem>
       </Select>

@@ -4,12 +4,16 @@ import { Add, FileDownload } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import CategoriesTable from "../categories-table";
 import { Helmet } from "react-helmet";
-
+import axios from 'axios';
+import { useState,useEffect } from "react";
 export default function CategoriesPage() {
     const theme = useTheme();
     const isSmallDownScreen = useMediaQuery(theme.breakpoints.down('sm'))
     const navigate = useNavigate();
-
+    const [categories,setCategoryList]=useState([]);
+    useEffect(() => {
+        axios.get(`${process.env.REACT_APP_BASE_URL}/api/categories`).then(res => {setCategoryList(res.data.data)})
+    }, []);
     return (
         <Container maxWidth='xl'>
             <Helmet>
@@ -45,7 +49,7 @@ export default function CategoriesPage() {
                     </Button>
                 </Stack>
             </Stack>
-            <CategoriesTable />
+            <CategoriesTable data={categories}/>
         </Container>
     )
 }

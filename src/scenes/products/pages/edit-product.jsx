@@ -5,8 +5,9 @@ import { useState } from "react";
 import SuccessConfirmModal from "../../../components/success-confirm-modal";
 import CreateProductForm from "../create-product-form";
 import { Helmet } from "react-helmet";
-
-export default function EditProductPage() {
+import axios from 'axios';
+import { useEffect } from "react";
+export default  function EditProductPage() {
     const theme = useTheme();
     const isSmallDownScreen = useMediaQuery(theme.breakpoints.down('sm'))
     const params = useParams();
@@ -14,12 +15,17 @@ export default function EditProductPage() {
     const [openCancelModal, setOpenCancelModal] = useState(false);
     const [openSuccessModal, setOpenSuccessModal] = useState(false);
     const [ successCategoryId, setSuccessCategoryId] = useState('');
-
+    const id=params.id;
+    const [product,setProductData]=useState([]);
+    const [isloading,setLoading]=useState(true);
+    useEffect(() => {
+        axios.get(`${process.env.REACT_APP_BASE_URL}/api/products/${id}`).then(res => { setProductData(res.data.product); setLoading(false)})
+    }, []);
     const handleCancel = () => setOpenCancelModal(true);
-    const handleSuccess = (id) => {
-        setOpenSuccessModal(true);
-        setSuccessCategoryId(id);
+    const handleConfirm = () => {
     }
+    if(!isloading){
+
     
     return (
         <Container maxWidth='xl'>
@@ -37,18 +43,8 @@ export default function EditProductPage() {
             <Box mt={4} display='flex' width={1} justifyContent='center'>
                 <CreateProductForm
                  editMode={true}
-                 product={{
-                    name: 'Watermelon',
-                    brand: 'No brand',
-                    category: {
-                        id: 231123214,
-                    },
-                    description: 'Milk is very good for your health',
-                    enabled: true,
-                    quantity: 14,
-                    imageUrl: '/imgs/watermelon.jpg',
-                 }}
-                 handleCancel={handleCancel} handleSuccess={handleSuccess}/>
+                 product={product}
+                 handleCancel={handleCancel} handleConfirm={handleConfirm}/>
             </Box>
 
             <StyledModal open={openCancelModal} handleClose={() => setOpenCancelModal(false)} handleContinue={() => {
@@ -69,4 +65,5 @@ export default function EditProductPage() {
             />
         </Container>
     )
+        }
 }

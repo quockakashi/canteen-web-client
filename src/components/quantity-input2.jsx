@@ -2,7 +2,7 @@ import { Add, Remove } from "@mui/icons-material";
 import { ButtonGroup, IconButton, Input, TextField } from "@mui/material";
 import { useState } from "react";
 
-export default function QuantityInput({defaultValue=0, nonNegative=false, handleChangeValue}) {
+export default function QuantityInput2({defaultValue=0, nonNegative=false, handleChangeValue}) {
     const [ value, setValue ] = useState
     (defaultValue);
     const handleChange = (e) => {
@@ -38,4 +38,3 @@ export default function QuantityInput({defaultValue=0, nonNegative=false, handle
         <IconButton disabled={!Number.isInteger(value)} onClick={onIncreaseQty}><Add /></IconButton>
     </ButtonGroup>);
 };
-

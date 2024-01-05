@@ -47,7 +47,7 @@ export default function CreateProductPage() {
                 </Stack>
             </Stack>
             <Box mt={4} display='flex' width={1} justifyContent='center'>
-                <CreateProductForm handleCancel={handleCancel} handleSuccess={handleSuccess}/>
+                <CreateProductForm handleCancel={handleCancel} handleSuccess={handleSuccess} editMode={false}/>
             </Box>
 
             <StyledModal open={openCancelModal} handleClose={() => setOpenCancelModal(false)} handleContinue={() => {

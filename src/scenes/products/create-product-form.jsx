@@ -1,34 +1,50 @@
 import { Card, CardActions, CardContent, Checkbox, Grid, Stack, TextField, Typography, alpha, useMediaQuery, useTheme } from "@mui/material";
 import { ActionButton } from "../../components/action-button";
 import FileInput from "../../components/file-input";
-import QuantityInput from "../../components/quantity-input";
-import SelectInput from "../../components/select-input";
-import { useState } from "react";
+import QuantityInput2 from "../../components/quantity-input2";
+import SelectInput2 from "../../components/select-input-2";
+import { useEffect, useState } from "react";
+import axios from 'axios';
 
-const listCategory = [
-    {value: 231123213, text: 'Milk and milk products'},
-    {value: 231123214, text: 'Fruit'},
-    {value: 231123215, text: 'Milk and milk products'},
-    {value: 231123217, text: 'Milk and milk products'},
-    {value: 231123218, text: 'Milk and milk products'},
-    {value: 231123219, text: 'Milk and milk products'}
-]
 
-export default function CreateProductForm({editMode, product, handleCancel, handleSuccess}) {
+export default function CreateProductForm({editMode, product, handleCancel, handleConfirm}) {
+    
+   
     const theme = useTheme();
+    console.log(product);
     const isMediumScreen = useMediaQuery(theme.breakpoints.up('md'));
-    const [ productName, setProductName ] = useState(editMode ? product.name : '');
-    const [ productBrand, setProductBrand ] = useState(editMode ? product.brand : '');
-    const [ productCat, setProductCat ] = useState(editMode ? product.category.id : 231123213);
-    const [ productDes, setProductDes ] = useState(editMode ? product.description : '');
-    const [ productEnabled, setProductEnabled ] = useState(editMode ? product.enabled : true);
-    const [ productQuantity, setProductQuantity ] = useState(editMode ? product.quantity : 0);
-
+    const [ productName, setProductName ] = useState((editMode===true)?product.name:'');
+    const [ productDes, setProductDes ] = useState((editMode===true)?product.description:'Description');
+    const [ productEnabled, setProductEnabled ] = useState((editMode===true)?product.enabled:0);
+    const [ productQuantity, setProductQuantity ] = useState((editMode===true)?product.stock:0);
+    const [ productPrice, setProductPrice ] = useState((editMode===true)?product.price:0);
+    const [ productCat, setProductCat ] = useState((editMode===true)?product.category:[]);
+    const [image,setImage]=useState((editMode)?product.image:'');
+    const [file,setFile]=useState(null);
     const handleContinue = () => {
         console.log('Hello');
-        handleSuccess('2421412');
+        let formData=new FormData();
+        formData.append('name',productName);
+        formData.append('category',productCat._id);
+        formData.append('description',productDes);
+        formData.append('enabled',productEnabled);
+        formData.append('price',productPrice);
+        formData.append('stock',productQuantity);
+        if(file){
+            formData.append('image',file);
+        }
+        if(editMode){
+            axios.patch(`${process.env.REACT_APP_BASE_URL}/api/products/${product._id}`, formData);
+        }else{
+            axios.post(`${process.env.REACT_APP_BASE_URL}/api/products`, formData);
+        }
     };
 
+    const [listCategory,setListCategory]=useState([]);
+    useEffect(() => {
+        axios.get(`${process.env.REACT_APP_BASE_URL}/api/categories`).then(res => {setListCategory(res.data.data)})
+    }, []);
+    console.log(listCategory);
     return (
         <Card 
             component='form' 
@@ -49,15 +65,7 @@ export default function CreateProductForm({editMode, product, handleCancel, hand
                         <Typography>Product Name: </Typography>
                     </Grid>
                     <Grid item xs={8}>
-                        <TextField value={productName} fullWidth />
-                    </Grid>
-                </Grid>
-                <Grid container alignItems='center'>
-                    <Grid item xs={4}>
-                        <Typography>Brand: </Typography>
-                    </Grid>
-                    <Grid item xs={8}>
-                        <TextField value={productBrand} fullWidth />
+                        <TextField value={productName} fullWidth onChange={(e)=>setProductName(e.target.value)} />
                     </Grid>
                 </Grid>
                 <Grid container alignItems='center'>
@@ -65,7 +73,8 @@ export default function CreateProductForm({editMode, product, handleCancel, hand
                         <Typography>Category: </Typography>
                     </Grid>
                     <Grid item xs={8} md={5}>
-                        <SelectInput defaultValue={productCat}  listItem={listCategory} />
+                        <SelectInput2 handleChange={(id)=>setProductCat(listCategory.find(obj=> {return obj._id===id}))} 
+                          defaultValue={(editMode)?productCat._id:[]} listItem={listCategory}   />
                     </Grid>
                 </Grid>
                 <Grid container alignItems='center'>
@@ -73,7 +82,15 @@ export default function CreateProductForm({editMode, product, handleCancel, hand
                         <Typography>Description: </Typography>
                     </Grid>
                     <Grid item xs={8}>
-                        <TextField value={productDes} fullWidth multiline rows={2} />
+                        <TextField value={productDes} fullWidth multiline rows={2} onChange={(e)=>setProductDes(e.target.value)} />
+                    </Grid>
+                </Grid>
+                <Grid container alignItems='center'>
+                    <Grid item xs={4}>
+                        <Typography>Price: </Typography>
+                    </Grid>
+                    <Grid item xs={8}>
+                        <TextField value={productPrice} fullWidth multiline rows={2}  onChange={(e)=>setProductPrice(e.target.value)}/>
                     </Grid>
                 </Grid>
                 <Grid container>
@@ -90,7 +107,7 @@ export default function CreateProductForm({editMode, product, handleCancel, hand
                             <Typography>Quantity: </Typography>
                         </Grid>
                         <Grid item xs={7}>
-                            <QuantityInput defaultValue={productQuantity} nonNegative />
+                            <QuantityInput2 defaultValue={productQuantity} handleChangeValue={setProductQuantity} nonNegative />
                         </Grid>
                     </Grid>
                 </Grid>
@@ -99,7 +116,7 @@ export default function CreateProductForm({editMode, product, handleCancel, hand
                         <Typography>Image: </Typography>
                     </Grid>
                     <Grid item xs={8}>
-                        <FileInput/>
+                        <FileInput defaultImage={image} onChange={setFile}/>
                     </Grid>
                 </Grid>
             </CardContent>

@@ -2,17 +2,20 @@ import { Box, Button, Container, Grid, Pagination, Stack, Typography, useMediaQu
 import { Add, FileDownload } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import ProductCard from "../product-card";
-import { products as productsData } from '../../../data'
+import { useState } from "react";
+import { useEffect } from "react";
 import ProductToolbar from "../product.toolbar";
 import { Helmet } from "react-helmet";
-
+import axios from 'axios';
 
 export default function ProductsPage() {
     const theme = useTheme();
     const isSmallDownScreen = useMediaQuery(theme.breakpoints.down('sm'))
     const navigate = useNavigate();
-    
-
+    const [productsData,setProductListData]=useState([]);
+    useEffect(() => {
+        axios.get(`${process.env.REACT_APP_BASE_URL}/api/products`).then(res => {setProductListData(res.data.data)})
+    }, []);
     return (
         <Container maxWidth='xl'>
             <Helmet>
@@ -51,7 +54,7 @@ export default function ProductsPage() {
             <ProductToolbar mb={4} />
             <Grid mb={5} container spacing={4}>
                 {productsData.map(product => (
-                    <Grid xs={12} sm={6} md={4} lg={3} item key={product.id}
+                    <Grid xs={12} sm={6} md={4} lg={3} item key={product._id}
                     display='flex'
                     width={1}
                     justifyContent='center' alignItems='center'>

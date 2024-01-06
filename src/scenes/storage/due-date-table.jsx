@@ -72,7 +72,7 @@ const rows = [
 
 
 
-export default function DueDateTable() {
+export default function DueDateTable({data}) {
     const theme = useTheme();
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);

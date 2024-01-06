@@ -1,23 +1,45 @@
-import { Box, Button, Checkbox, Container, IconButton, InputAdornment, OutlinedInput, Stack,  Typography, useMediaQuery, useTheme } from "@mui/material";
+import { Alert, AlertTitle, Box, Button, Checkbox, Container, IconButton, InputAdornment, OutlinedInput, Stack,  Typography, useMediaQuery, useTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useState } from "react";
-import { Field, Form, Formik } from "formik";
 import { loginSchema } from "../../schemas";
 import axios from 'axios';
-export default function LoginPage() {
+export default function LoginPage({setLoggedin}) {
     const theme = useTheme();
     const navigate = useNavigate();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [hasError, setHasError] = useState(false);
+    const [hasWarning, setHasWarning] = useState(false)
 
     const [showPassword, setShowPassword] = useState(false);
     const handleClickShowPassword = () => setShowPassword(true);
     const handleMouseDownPassword = () => setShowPassword(false);
     const isMediumScreen = useMediaQuery(theme.breakpoints.up('md'));
     const onSuccess=()=>(navigate('/home'));
-    const onSubmit= (values) => {
+    const loginHandler= async (event) => {
        
-        axios.post(`${process.env.REACT_APP_BASE_URL}/api/login`, {'username':values.username,'password':values.password});
+        if(!email || !password) {
+            setHasWarning(true);
+            setTimeout(() => {
+                setHasWarning(false);
+            }, 3000);
+            return;
+        } else {
+            try {
+                const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/auth/login`, {email, password, rememberMe: true});
+            if(response.status === 200) {
+                setLoggedin(true);
+                navigate('/home');
+            } 
+            } catch(error) {
+                setHasError(true);
+                setTimeout(() => {
+                    setHasError(false);
+                }, 3000);
+            }
+        }
     }
     return (
         <Container 
@@ -32,6 +54,14 @@ export default function LoginPage() {
             <Helmet>
                 <title>Login - Canteen Dashboard</title>
             </Helmet>
+            {hasWarning && <Alert variant="filled" severity="warning" sx={{position: 'absolute', top: 10, right: 10}}>
+                <AlertTitle>Warning</AlertTitle>
+                Warning — <strong>missing email or password</strong>
+            </Alert>}
+            {hasError && <Alert variant="filled" severity="error" sx={{position: 'absolute', top: 10, right: 10}}>
+                <AlertTitle>Error</AlertTitle>
+                Error — <strong>invalid credentials!</strong>
+            </Alert>}
             {
                 isMediumScreen && 
                 <Stack textAlign='center' mr={'56px'}>
@@ -39,16 +69,6 @@ export default function LoginPage() {
                 <Typography mt={2} variant="subtitle2" color={theme.palette.primary.dark} >*This project is intended for study purposes only.</Typography>
                 </Stack>
             }
-            <Formik 
-                initialValues={{
-                    username: '',
-                    password: '',
-                }}
-                validationSchema={loginSchema}
-                onSubmit={onSubmit}
-            >
-                {(props) => (
-                    <Form>
                     <Stack 
                     bgcolor={theme.palette.common.white}
                     sx={{
@@ -64,53 +84,28 @@ export default function LoginPage() {
                         mb='16px'
                     >Welcome back!</Typography>
                     <Stack mb={2}>
-                        <Field name="username">
-                            {({
-                                field,
-                                meta
-                            }) => (
-                                <>
-                                    <Typography 
-                                        component='label'
+                    <Typography 
+                                    component='label'
                                         variant="subtitle1"
-                                        htmlFor="username">
-                                        Username
+                                        htmlFor="email">
+                                        Email
                                     </Typography>
                                     <OutlinedInput 
-                                        id={field.name} onChange={field.onChange} value={field.value}
-                                        onBlur={field.onBlur}
-                                        sx={{
-                                            '& fieldset': meta.error&& meta.touched && {
-                                                borderColor: theme.palette.error.main
-                                            },
-                                            '&.MuiInputBase-root:hover fieldset': meta.error&& meta.touched && {
-                                                borderColor: theme.palette.error.main
-                                            },
-                                            '&.Mui-focused fieldset': meta.error&& meta.touched && {
-                                                borderColor: `${theme.palette.error.main} !important` 
-                                            }
-                                        }}
+                                        value={email}
+                                        onChange={(event) => setEmail(event.target.value)}
+                                        id='email'
                                     type="text"/>
-                                    {meta.error && meta.touched && <Typography 
-                                    color='error'
-                                    variant="subtitle2">{meta.error}</Typography>}
-                                </>
-                            )}
-                        </Field>
+        
                     </Stack>
                     <Stack mb={2}>
-                        <Field name="password">
-                            {({field, meta}) => (
-                                <>
-                                    <Typography  
+                        <Typography  
                                        component='label' variant="subtitle1" htmlFor="password">Password
                                     </Typography>
                                     <OutlinedInput
                                         fullWidth
-                                        value={field.value}
-                                        onBlur={field.onBlur}
-                                        onChange={field.onChange}
-                                        id={field.name}
+                                        name="password"
+                                        value={password}
+                                        onChange={(event) => setPassword(event.target.value)}
                                         type={showPassword ? 'text' : 'password'}
                                         endAdornment={
                                         <InputAdornment position="end">
@@ -124,22 +119,7 @@ export default function LoginPage() {
                                         </IconButton>
                                     </InputAdornment>
                                     }
-                                    sx={{
-                                        '& fieldset': meta.error&& meta.touched && {
-                                            borderColor: theme.palette.error.main
-                                        },
-                                        '&:hover fieldset': meta.error&& meta.touched &&  {
-                                            borderColor: `${theme.palette.error.main} !important`
-                                        },
-                                        '&.Mui-focused fieldset': meta.error && meta.touched &&  {
-                                            borderColor: `${theme.palette.error.main} !important`
-                                        }
-                                    }}
                                 />
-                                {meta.error && meta.touched && <Typography variant="subtitle2" color='error'>{meta.error}</Typography>}
-                                </>
-                            )}
-                        </Field>
                     </Stack>
 
                     <Stack direction='row' alignItems='center' spacing={0.5}>
@@ -148,16 +128,13 @@ export default function LoginPage() {
                     </Stack>
                     
                     <Typography mb={3} variant="subtitle2" visibility={false}>
-                        Invalid Account. If you forgot your password, please contact to admin!
+                        If you forgot your password, please contact to admin!
                     </Typography>
                     
-                    <Button size="large" type="submit" variant="contained">
+                    <Button size="large" type="submit" variant="contained" onClick={loginHandler}>
                         Login
                     </Button>
                 </Stack>
-                </Form>
-                )}
-            </Formik>
         </Container>
     )
 }

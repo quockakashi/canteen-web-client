@@ -1,7 +1,8 @@
 import { AppBar, Avatar, Box, Button, Fade, IconButton, InputBase, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, Popper, Stack, Toolbar, Typography, alpha, duration, useMediaQuery, useTheme } from "@mui/material";
 import { ArrowForwardIosOutlined, DarkModeOutlined, LightModeOutlined, LogoutOutlined, Menu as MenuIcon, NotificationsOutlined, Search as SearchIcon, SettingsOutlined } from "@mui/icons-material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function Header({ openNav, onOpenNav }) {
     const theme = useTheme();
@@ -11,6 +12,7 @@ export default function Header({ openNav, onOpenNav }) {
     const [ anchorEl, setAnchorEl ] = useState(null);
     const navigate = useNavigate();
 
+    const [user, setUser] = useState({});
     const handleOpenPopper = (e) => {
         const anchorEl = e.currentTarget;
         setAnchorEl(anchorEl);
@@ -83,17 +85,17 @@ export default function Header({ openNav, onOpenNav }) {
                                         <ListItem disablePadding>
                                             <ListItemButton onClick={handleViewProfileClick}>
                                                 <Stack direction="row" alignItems="center" spacing={2}>
-                                                    <Avatar sx={{width: 30, height: 30}} />
-                                                    <Typography fontWeight="bold">Minh Trần</Typography>
+                                                    <Box component='img' src={user? user.image?.url : ''} sx={{width: 30, height: 30}} />
+                                                    <Typography fontWeight="bold">{user ? user.name: ''}</Typography>
                                                 </Stack>
                                             </ListItemButton>
                                         </ListItem>
                                         <ListItem disablePadding>
-                                            <ListItemButton sx={{
+                                            <ListItemButton onClick={() => navigate('/login')} sx={{
                                                 display: 'flex',
                                                 justifyContent: "space-between"
                                             }}>
-                                                <ListItemIcon>
+                                                <ListItemIcon >
                                                     <LogoutOutlined />
                                                 </ListItemIcon>
                                                 <Typography sx={{flex: 1}}>
@@ -113,7 +115,7 @@ export default function Header({ openNav, onOpenNav }) {
                         borderRadius: '50%'
                     }}
                     >
-                        <Avatar sx={{
+                        <Avatar src={user ? user.image?.url : undefined} sx={{
                             width: 35,
                             height: 35,
                         }} >

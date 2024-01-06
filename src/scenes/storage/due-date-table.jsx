@@ -1,74 +1,9 @@
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import moment from 'moment'
 import { Box, IconButton, Toolbar, Tooltip, Typography, alpha, useTheme } from '@mui/material';
 
-const columns = [
-    { 
-        field: 'id',
-        headerName: 'ID',
-        flex: 0.5 
-    },
-    { 
-        field: 'products',
-        headerName: 'Products', 
-        flex: 1.5, 
-        sortable: false,
-    },
-    { 
-        field: 'expiredDate', 
-        headerName: 'Expired Date', 
-        flex: 1,
-        valueGetter: (params) => {
-            return moment(params.row.createdAt).format('DD/MM/YYYY');
-        } 
-    },
-    { 
-        field: 'amount',
-        headerName: 'Amounts', 
-        flex: 2, 
-        sortable: false,
-    },  
-];
 
-const rows = [
-    {
-        id: 1,
-        products: 'Milk',
-        expiredDate: '2022-10-15T12:30:00.000Z',
-        amount: 40,
-      },
-      {
-        id: 2,
-        products: 'Milk',
-        expiredDate: '2022-10-15T12:30:00.000Z',
-        amount: 40,
-      },
-      {
-        id: 3,
-        products: 'Milk',
-        expiredDate: '2022-10-15T12:30:00.000Z',
-        amount: 40,
-      },
-      {
-        id: 4,
-        products: 'Milk',
-        expiredDate: '2022-10-15T12:30:00.000Z',
-        amount: 40,
-      },
-      {
-        id: 5,
-        products: 'Milk',
-        expiredDate: '2022-10-15T12:30:00.000Z',
-        amount: 40,
-      },
-      {
-        id: 6,
-        products: 'Milk',
-        expiredDate: '2022-10-15T12:30:00.000Z',
-        amount: 40,
-      },
-];
 
 
 
@@ -85,6 +20,38 @@ export default function DueDateTable({data}) {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+  const columns =useMemo(()=> ([
+    { 
+        field: '_id',
+        headerName: 'ID',
+        flex: 0.5 
+    },
+    { 
+        field: 'product',
+        headerName: 'Product', 
+        flex: 1.5, 
+        sortable: false,
+        renderCell: (params) =>{return <Box>
+          <Typography>{params.row.product.name}</Typography>
+        </Box>
+        }        
+    },
+    { 
+        field: 'expiredDate', 
+        headerName: 'Expired Date', 
+        flex: 1,
+        valueGetter: (params) => {
+            return moment(params.row.createdAt).format('DD/MM/YYYY');
+        } 
+    },
+    { 
+        field: 'amount',
+        headerName: 'Amounts', 
+        flex: 2, 
+        sortable: false,
+    },  
+]),[data]);
+
   return (
     <Box
         minWidth={600}
@@ -98,7 +65,9 @@ export default function DueDateTable({data}) {
     >
       <DataGrid
         disableRowSelectionOnClick
-        rows={rows}
+      
+        rows={data}    
+        getRowId={(row)=> row._id }    
         columns={columns}
         initialState={{
           pagination: {

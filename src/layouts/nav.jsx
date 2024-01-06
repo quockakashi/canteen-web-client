@@ -1,6 +1,7 @@
 import { AttachMoney, AttachMoneyOutlined, CategoryOutlined, FaceOutlined, HomeOutlined, LocalDiningOutlined, LogoutOutlined, MoneyOutlined, ShoppingCartOutlined, StorageOutlined } from "@mui/icons-material";
 import { Avatar, Box, Button, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Stack, Typography, alpha, useMediaQuery, useTheme } from "@mui/material";
-import { useEffect } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import {useLocation, useNavigate} from 'react-router-dom'
 
 const navItems = [
@@ -47,7 +48,7 @@ export default function Nav({ openNav, onCloseNav }) {
     const theme = useTheme();
     const isNonMobile = useMediaQuery(theme.breakpoints.up('lg'));
     const navigate = useNavigate();
-
+    const [user, setUser] = useState(null);
 
     useEffect(() => {
         if(openNav) {
@@ -86,7 +87,7 @@ export default function Nav({ openNav, onCloseNav }) {
                         bgcolor: theme.palette.primary.light
                     }}
                 >
-                    <Avatar sx={{ml: 1.5}}>
+                    <Avatar sx={{ml: 1.5}} src={user ? user.image.url : undefined}>
         
                     </Avatar>
                     <Stack alignItems='center' px={2} color={theme.palette.primary.dark} justifyContent='center' textAlign='center' width={1}>
@@ -141,7 +142,7 @@ export default function Nav({ openNav, onCloseNav }) {
             </List>
                 </Stack>
                 <Stack  sx={{alignContent: 'center', justifyContent: 'center', width: 1, my: 1.5}}>
-                <Button  startIcon={<LogoutOutlined />} sx={{width: '100px', color: theme.palette.primary.contrastText, mx: 'auto', px: 2, py: 1, borderRadius: 8}}>Logout</Button>
+                <Button  startIcon={<LogoutOutlined />} sx={{width: '100px', color: theme.palette.primary.contrastText, mx: 'auto', px: 2, py: 1, borderRadius: 8}} onClick={() => navigate('/login')}>Logout</Button>
             </Stack>
             </Drawer>
         </Box>

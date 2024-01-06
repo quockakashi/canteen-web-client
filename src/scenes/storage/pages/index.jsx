@@ -4,14 +4,17 @@ import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import StorageToolbar from "../storage-tool-bar";
 import DueDateTable from "../due-date-table";
-
-
+import { useState,useEffect } from "react";
+import axios from 'axios';
 export default function StoragePage() {
     const theme = useTheme();
     const isSmallDownScreen = useMediaQuery(theme.breakpoints.down('sm'))
     const navigate = useNavigate();
-    
-
+    const [listBatches,setListBatch]=useState([]);
+    useEffect(() => {
+        axios.get(`${process.env.REACT_APP_BASE_URL}/api/batches`).then(res => {setListBatch(res.data.result)})
+    }, []);
+    console.log(listBatches);
     return (
         <Container maxWidth='xl'>
             <Helmet>
@@ -35,20 +38,10 @@ export default function StoragePage() {
                     >
                         {<Add />} {!isSmallDownScreen &&  `Receive stock`}
                     </Button>
-                    <Button onClick={() => navigate('deliver-stock')} variant="contained" sx={{...(isSmallDownScreen ? {
-                        width: 40,
-                        height: 40,
-                        borderRadius: 50,
-                    } : {
-                        py: 1
-                    }), textTransform: 'none'}}
-                    >
-                        {<Remove />} {!isSmallDownScreen &&  `Deliver Stock`}
-                    </Button>
                 </Stack>
             </Stack>
             <StorageToolbar mb={4} />
-            <DueDateTable />
+            <DueDateTable data={listBatches} />
         </Container>
     )
 }

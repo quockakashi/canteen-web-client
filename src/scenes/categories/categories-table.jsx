@@ -74,7 +74,7 @@ export default function CategoriesTable({data}) {
         {
             field: 'products',
             headerName: 'Total Product',
-            renderCell: (params) => (<Box display='flex' width={1} justifyContent='space-between' px={3} gap={1}>{params.row.totalProduct} <Link href={`/products?categories=${params.row._id}`} sx={{textDecoration: 'none'}} variant='body2'>View</Link></Box>),
+            renderCell: (params) => (<Box display='flex' width={1} justifyContent='space-between' px={3} gap={1}><Typography>{params.row.products}</Typography> </Box>),
             flex: 1,
         },
         {

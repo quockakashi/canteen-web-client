@@ -5,7 +5,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useState } from "react";
 import { loginSchema } from "../../schemas";
 import axios from 'axios';
-export default function LoginPage() {
+export default function LoginPage({setLoggedin}) {
     const theme = useTheme();
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
@@ -29,7 +29,8 @@ export default function LoginPage() {
         } else {
             try {
                 const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/auth/login`, {email, password, rememberMe: true});
-            if(response.status == 200) {
+            if(response.status === 200) {
+                setLoggedin(true);
                 navigate('/home');
             } 
             } catch(error) {

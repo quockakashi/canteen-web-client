@@ -49,9 +49,6 @@ export default function Nav({ openNav, onCloseNav }) {
     const isNonMobile = useMediaQuery(theme.breakpoints.up('lg'));
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
-    useEffect(() => {
-        axios.get(`${process.env.REACT_APP_BASE_URL}/api/users/self`, {withCredentials: true}).then((response => setUser(response.data.data)))
-    }, []);
 
     useEffect(() => {
         if(openNav) {

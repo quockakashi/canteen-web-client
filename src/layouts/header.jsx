@@ -13,10 +13,6 @@ export default function Header({ openNav, onOpenNav }) {
     const navigate = useNavigate();
 
     const [user, setUser] = useState({});
-    useEffect(() => {
-        axios.get(`${process.env.REACT_APP_BASE_URL}/api/users/self`, {withCredentials: true}).then((response => setUser(response.data.data)))
-    }, []);
-
     const handleOpenPopper = (e) => {
         const anchorEl = e.currentTarget;
         setAnchorEl(anchorEl);

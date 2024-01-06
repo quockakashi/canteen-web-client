@@ -10,10 +10,10 @@ export default function ReceiveStockPage() {
     const isSmallDownScreen = useMediaQuery(theme.breakpoints.down('sm'))
     const navigate = useNavigate();
     const [openConfirmModal, setOpenConfirmModal] = useState(false);
-
-    const handleConfirm = () => {
+    const handleConfirm = (id) => {
         setOpenConfirmModal(true);
     }
+    
     
     return (
         <Container maxWidth='xl'>
@@ -40,8 +40,7 @@ export default function ReceiveStockPage() {
             handleConfirm={() => {
                 setOpenConfirmModal(false);
             }}
-            title={'Confirm receive batch of goods'}
-            content={`The batch of product: `}
+            title={'Success receive batch of goods'}
             />
         </Container>
     )

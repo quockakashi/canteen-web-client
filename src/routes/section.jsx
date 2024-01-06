@@ -19,18 +19,19 @@ import EditCategoryPage from "../scenes/categories/pages/edit-category-page";
 import EditProductPage from "../scenes/products/pages/edit-product";
 import CreateAccountPage from "../scenes/accounts/pages/new-account-page";
 import EditAccountPage from "../scenes/accounts/pages/edit-account";
-
+import { useState } from "react";
 export default function Router() {
+    const [loggedin,setLoggedin]=useState(false);
     const routes = useRoutes([
         {
-            element: (
+            element:loggedin? (
                 <DashboardLayout>
                     <Outlet />
                 </DashboardLayout>
-            ),
-            children: [
+            ):<LoginPage setLoggedin={setLoggedin}/>,
+            children: loggedin?[
                 {path: '', element: <Navigate to='home' replace></Navigate>},
-                {path: 'home', element: <Dashboard />},
+                {path: 'home', element:<Dashboard />},
                 {path: 'orders', children: [
                     {index: true, element: <OrdersPage />},
                     {path: 'new-oder', element: <CreateOrderPage />}
@@ -65,11 +66,17 @@ export default function Router() {
                     path: '/profile',
                     element: <ProfilePage />
                 }
-            ]
+            ]:[{
+                
+                path: '/login',
+                element: <LoginPage setLoggedin={setLoggedin}/>
+            },
+            {path: '', element: <Navigate to='login' replace></Navigate>},
+        ]
         },
         {
             path: '/login',
-            element: <LoginPage />
+            element: <LoginPage setLoggedin={setLoggedin}/>
         },
         {
             path: '/*',

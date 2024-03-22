@@ -1,70 +1,10 @@
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+ScreenShots:
+![Screenshot (232)](https://github.com/quocng777/canteen-web-dashboard/assets/88817280/375acae7-7270-4dcf-bb41-c7b01afe2d71)
+![Screenshot (233)](https://github.com/quocng777/canteen-web-dashboard/assets/88817280/3e639cc2-05f8-4070-96c3-678b37be7005)
+![Screenshot (234)](https://github.com/quocng777/canteen-web-dashboard/assets/88817280/cb54c065-9e7b-4896-8058-fc6338000ab2)
+![Screenshot (235)](https://github.com/quocng777/canteen-web-dashboard/assets/88817280/da09c55d-7aec-49aa-9900-d1ca27ed7e2d)
+![Screenshot (236)](https://github.com/quocng777/canteen-web-dashboard/assets/88817280/d9831672-5f87-4e59-98ff-860c6dc499f4)
+![Screenshot (237)](https://github.com/quocng777/canteen-web-dashboard/assets/88817280/2e81f77e-757d-41dc-892a-ee6aa19640a2)
+![Screenshot (238)](https://github.com/quocng777/canteen-web-dashboard/assets/88817280/020719a5-1da6-43f1-a55d-d1471d4b7638)
+![Screenshot (239)](https://github.com/quocng777/canteen-web-dashboard/assets/88817280/b7a3f580-7cdb-4abc-9f7a-fd75c1dc5ae4)
+![Screenshot (240)](https://github.com/quocng777/canteen-web-dashboard/assets/88817280/8b6c026d-5207-4e44-b60c-166891b1b255)
